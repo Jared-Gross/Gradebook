@@ -164,7 +164,9 @@ class MainMenu(QMainWindow):
         self.verticalLayout_courses.addWidget(self.courses_widget)
         tab_order = [course.name for course in self.school.courses]
         with contextlib.suppress(ValueError, AttributeError):
-            self.courses_widget.setCurrentIndex(tab_order.index(self.last_selected_course))
+            self.courses_widget.setCurrentIndex(
+                tab_order.index(self.last_selected_course)
+            )
         self.courses_widget.currentChanged.connect(self.courses_tab_changed)
         self.courses_widget.enable_save_tab_order()
         self.courses_widget.load_tab()

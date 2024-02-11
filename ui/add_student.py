@@ -18,10 +18,12 @@ class AddStudent(QDialog):
         super(AddStudent, self).__init__(parent)
         uic.loadUi("ui/add_student.ui", self)
         self.pushButton_set_color.clicked.connect(self.set_color)
-        self.color = (random.randint(30, 200), random.randint(30, 200), random.randint(30, 200))
-        button_color = QColor(
-            self.color[0], self.color[1], self.color[2]
+        self.color = (
+            random.randint(30, 200),
+            random.randint(30, 200),
+            random.randint(30, 200),
         )
+        button_color = QColor(self.color[0], self.color[1], self.color[2])
         self.pushButton_set_color.setStyleSheet(
             f"background-color: {button_color.name()}"
         )
@@ -47,7 +49,6 @@ class AddStudent(QDialog):
 
     def get_color(self) -> tuple[int, int, int]:
         return self.color
-        
 
     def set_color(self):
         color = QColorDialog.getColor()

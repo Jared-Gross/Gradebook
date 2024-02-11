@@ -141,7 +141,7 @@ class StudentDialog(QDialog):
     def load_summary(self):
         self.clear_layout(self.verticalLayout_summary)
         courses_tool_box = QToolBox(self)
-        courses_tool_box.setMinimumHeight(len(list(self.enrolled_courses.keys()))*40)
+        courses_tool_box.setMinimumHeight(len(list(self.enrolled_courses.keys())) * 40)
         for course in self.enrolled_courses:
             summary_widget = StudentSummaryWidget(
                 self.enrolled_courses[course], self.student, courses_tool_box

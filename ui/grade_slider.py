@@ -53,26 +53,24 @@ class GradeSlider(QWidget):
 
     def input_grade_changed(self):
         new_grade = self.lineEdit_input.text().strip()
-        if '/' not in new_grade: 
+        if "/" not in new_grade:
             worth = 100
         else:
-            if new_grade.split('/')[-1] == '':
+            if new_grade.split("/")[-1] == "":
                 return
-            worth = float(new_grade.split('/')[-1])
+            worth = float(new_grade.split("/")[-1])
 
-        score = float(new_grade.split('/')[0])
-        
+        score = float(new_grade.split("/")[0])
+
         if worth == 0:
             return
-        
+
         self.assignment.score = score
         self.assignment.worth = worth
-        
+
         with contextlib.suppress(TypeError):
             self.doubleSpinBox_percentage.disconnect()
-        self.doubleSpinBox_percentage.setValue(
-            score / worth * 100
-        )
+        self.doubleSpinBox_percentage.setValue(score / worth * 100)
         with contextlib.suppress(TypeError):
             self.horizontalSlider.disconnect()
         self.horizontalSlider.setMaximum(int(worth))
@@ -85,7 +83,9 @@ class GradeSlider(QWidget):
         with contextlib.suppress(TypeError):
             self.doubleSpinBox_percentage.disconnect()
             self.lineEdit_input.disconnect()
-        self.lineEdit_input.setText(f'{self.horizontalSlider.value()}/{self.get_worth()}')
+        self.lineEdit_input.setText(
+            f"{self.horizontalSlider.value()}/{self.get_worth()}"
+        )
         self.doubleSpinBox_percentage.setValue(
             (self.horizontalSlider.value() / self.get_worth()) * 100
         )

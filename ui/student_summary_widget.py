@@ -43,7 +43,7 @@ class StudentSummaryWidget(QTreeWidget):
                 total_score += assignment.score
                 total_worth += assignment.worth
                 if assignment.worth != 0:
-                    weighted_percentage = assignment.score/assignment.worth
+                    weighted_percentage = assignment.score / assignment.worth
                     assignment_item = QTreeWidgetItem(
                         assessment_item,
                         [

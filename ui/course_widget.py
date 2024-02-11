@@ -208,10 +208,12 @@ class CourseWidget(QWidget):
             self.assessment_tab_box.addTab(table_widget, assessment)
         self.assessment_tab_box.currentChanged.connect(self.assessment_tab_box_changed)
         self.assessment_tab_box.enable_save_tab_order()
-        
+
         with contextlib.suppress(AttributeError, ValueError):
             self.assessment_tab_box.setCurrentIndex(
-                self.assessment_tab_box.get_tab_order().index(self.last_selected_assessment)
+                self.assessment_tab_box.get_tab_order().index(
+                    self.last_selected_assessment
+                )
             )
         self.horizontalLayout_3.addWidget(self.assessment_tab_box)
 

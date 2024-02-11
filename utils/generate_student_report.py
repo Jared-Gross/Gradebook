@@ -23,23 +23,23 @@ class StudentReport:
         self.generated_html_file = self.generated_html_file.replace(
             "[[ STUDENT_NAME ]]", self.student.name
         )
-        
-        student_html = ''
-        student_html += f'<h1>{self.student.first_name} {self.student.middle_name} {self.student.last_name}</h1>'
-        student_html += f'<p>Gender: {self.student.gender}</p>'
-        student_html += f'<p>Grade: {self.student.get_grade_level()}</p>'
-        student_html += f'<p>School Stage: {self.student.get_school_stage()}</p>'
-        student_html += f'<p>Birthday: {self.student.birthday}</p>'
-        student_html += f'<p>Age: {self.student.get_age()}</p>'
-        
-        summary_html = ''
+
+        student_html = ""
+        student_html += f"<h1>{self.student.first_name} {self.student.middle_name} {self.student.last_name}</h1>"
+        student_html += f"<p>Gender: {self.student.gender}</p>"
+        student_html += f"<p>Grade: {self.student.get_grade_level()}</p>"
+        student_html += f"<p>School Stage: {self.student.get_school_stage()}</p>"
+        student_html += f"<p>Birthday: {self.student.birthday}</p>"
+        student_html += f"<p>Age: {self.student.get_age()}</p>"
+
+        summary_html = ""
         summary_html += '<div class="student_summary">'
         summary_html += "<h3>Summary</h3>"
         summary_html += '<table class="responsive-table highlight">'
-        summary_html += '<thead><tr>'
-        summary_html += '<th>Course</th><th>Points</th><th>Weighted Points</th><th>Percentage</th><th>Letter Grade</th>'
-        summary_html += '</tr></thead>'
-        
+        summary_html += "<thead><tr>"
+        summary_html += "<th>Course</th><th>Points</th><th>Weighted Points</th><th>Percentage</th><th>Letter Grade</th>"
+        summary_html += "</tr></thead>"
+
         page_html = ""
 
         for course in self.courses:
@@ -49,7 +49,7 @@ class StudentReport:
             course_total_weighted_worth = 0.0
             course_html = ""
             course_html += f'<details id="{course.name}" open=true>'
-            course_html += f'<summary><h2>{course.name}</h2></summary>'
+            course_html += f"<summary><h2>{course.name}</h2></summary>"
             course_html += '<div class="course">'
             course_html += '<div class="course_tables">'
             for assessment, assessment_data in course.assessments.items():
@@ -64,7 +64,7 @@ class StudentReport:
                 table_html += '<col width="40px"/><col width="40px"/><col width="40px"/><col width="40px"/>'
                 table_header = "<thead><tr>"
                 for header in ["Name", "Score", "Percentage", "Letter Grade"]:
-                    table_header += f'<th>{header}</th>'
+                    table_header += f"<th>{header}</th>"
                 table_header += "</tr></thead>"
                 table_html += table_header
                 table_html += "<tbody>"
@@ -78,7 +78,7 @@ class StudentReport:
                         for data in [
                             assignment.name,
                             f"{assignment.score}/{assignment.worth}",
-                            f'{round(assignment.get_percentage(), 2)}%',
+                            f"{round(assignment.get_percentage(), 2)}%",
                             assignment.get_letter_grade(),
                         ]:
                             row_data += f"<td>{data}</td>"
@@ -87,12 +87,16 @@ class StudentReport:
                         table_rows += row_data
                         table_rows += "</tr>"
                 if assessment_total_worth != 0:
-                    course_total_weighted_score += course.grading[assessment] * assessment_total_score / assessment_total_worth
+                    course_total_weighted_score += (
+                        course.grading[assessment]
+                        * assessment_total_score
+                        / assessment_total_worth
+                    )
                     course_total_weighted_worth += course.grading[assessment]
-                    table_rows += f'<tr><td><b>Total</b></td><td><b>{round(course.grading[assessment] * assessment_total_score / assessment_total_worth, 2)}/{round(course.grading[assessment], 2)}</b></td><td><b>{round(assessment_total_score / assessment_total_worth * 100,2)}%</b></td><td><b>{self.get_letter_grade(assessment_total_score/assessment_total_worth*100)}</b></td></tr>'
+                    table_rows += f"<tr><td><b>Total</b></td><td><b>{round(course.grading[assessment] * assessment_total_score / assessment_total_worth, 2)}/{round(course.grading[assessment], 2)}</b></td><td><b>{round(assessment_total_score / assessment_total_worth * 100,2)}%</b></td><td><b>{self.get_letter_grade(assessment_total_score/assessment_total_worth*100)}</b></td></tr>"
                 else:
                     course_total_weighted_worth += course.grading[assessment]
-                    table_rows += f'<tr><td><b>Total</b></td><td><b>0.0/{round(course.grading[assessment], 2)}</b></td><td><b>0.0%</b></td><td><b>{self.get_letter_grade(0.0)}</b></td></tr>'
+                    table_rows += f"<tr><td><b>Total</b></td><td><b>0.0/{round(course.grading[assessment], 2)}</b></td><td><b>0.0%</b></td><td><b>{self.get_letter_grade(0.0)}</b></td></tr>"
 
                 table_html += table_rows
                 table_html += "</tbody>"
@@ -105,19 +109,19 @@ class StudentReport:
             grand_total_weighted_worth += course_total_weighted_worth
             summary_html += f'<tr><td><a href="#{course.name}">{course.name}</a></td><td>{round(course_total_score, 2)}/{round(course_total_worth, 2)}</td><td>{round(course_total_weighted_score, 2)}/{course_total_weighted_worth}</td><td>{round(course_total_weighted_score, 2)}%</td><td>{self.get_letter_grade(course_total_weighted_score/course_total_weighted_worth*100)}</td></tr>'
             course_html += '<div class="page-break"></div>'
-            course_html += '</div>'
-            course_html += '</div>'
+            course_html += "</div>"
+            course_html += "</div>"
             course_html += "</details>"  # course
             page_html += course_html
             grand_total_score += course_total_score
             grand_total_worth += course_total_worth
 
-        summary_html += f'<tr><td><b>Grand total</b></td><td><b>{round(grand_total_score, 2)}/{grand_total_worth}</b></td><td><b>{round(grand_total_weighted_score, 2)}/{grand_total_weighted_worth}</b></td><td><b>{round(grand_total_weighted_score/grand_total_weighted_worth*100,2)}%</b></td><td><b>{self.get_letter_grade(grand_total_weighted_score/grand_total_weighted_worth*100)}</b></td></tr>'
-        summary_html += '</table>'
-        summary_html += '</div>'
-        
+        summary_html += f"<tr><td><b>Grand total</b></td><td><b>{round(grand_total_score, 2)}/{grand_total_worth}</b></td><td><b>{round(grand_total_weighted_score, 2)}/{grand_total_weighted_worth}</b></td><td><b>{round(grand_total_weighted_score/grand_total_weighted_worth*100,2)}%</b></td><td><b>{self.get_letter_grade(grand_total_weighted_score/grand_total_weighted_worth*100)}</b></td></tr>"
+        summary_html += "</table>"
+        summary_html += "</div>"
+
         student_html += summary_html
-        
+
         self.generated_html_file = self.generated_html_file.replace(
             "[[ TABLES ]]", page_html
         )
@@ -128,7 +132,7 @@ class StudentReport:
             f.write(self.generated_html_file)
 
         return self.generated_html_file
-    
+
     def get_letter_grade(self, percentage) -> str:
         grade_ranges = [
             (90, "A+"),
