@@ -2,7 +2,7 @@ import contextlib
 
 import ujson as json
 from PyQt6 import uic
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QRegularExpression
 from PyQt6.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
     QToolBox,
     QWidget,
 )
-
+from PyQt6.QtGui import QRegularExpressionValidator
 from ui.student import StudentWidget
 from utils import globals
 from utils.assignment import Assignment
@@ -25,12 +25,12 @@ class GradeSlider(QWidget):
         uic.loadUi("ui/grade_slider.ui", self)
         self.school = school
         self.assignment = assignment
-        self.doubleSpinBox_score.setValue(assignment.score)
-        self.doubleSpinBox_worth.setValue(int(assignment.worth))
         self.horizontalSlider.setMaximum(int(assignment.worth))
-        self.doubleSpinBox_worth.wheelEvent = lambda event: event.ignore()
         self.horizontalSlider.wheelEvent = lambda event: event.ignore()
-        self.doubleSpinBox_score.wheelEvent = lambda event: event.ignore()
+        self.lineEdit_input.setText(f"{self.assignment.score}/{self.assignment.worth}")
+        regex = QRegularExpression("[-]?[0-9]+[,.]?[0-9]*([\/][0-9]+[,.]?[0-9]*)*")
+        validator = QRegularExpressionValidator(regex)
+        self.lineEdit_input.setValidator(validator)
         self.doubleSpinBox_percentage.wheelEvent = lambda event: event.ignore()
         try:
             self.doubleSpinBox_percentage.setValue(
@@ -39,63 +39,59 @@ class GradeSlider(QWidget):
         except ZeroDivisionError:
             self.doubleSpinBox_percentage.setValue(0.0)
         self.horizontalSlider.setValue(int(assignment.score))
-        self.update_letter_grade()
-
         self.doubleSpinBox_percentage.valueChanged.connect(self.percentage_change)
-        self.doubleSpinBox_score.valueChanged.connect(self.score_changed)
-        self.doubleSpinBox_worth.valueChanged.connect(self.worth_changed)
         self.horizontalSlider.valueChanged.connect(self.slider_changed)
+        self.lineEdit_input.editingFinished.connect(self.input_grade_changed)
+        self.update_letter_grade()
 
     def percentage_change(self):
         with contextlib.suppress(TypeError):
             self.horizontalSlider.disconnect()
         self.horizontalSlider.setValue(int(self.get_percentage()))
-        self.doubleSpinBox_score.setValue(
-            self.get_worth() * self.get_percentage() / 100
-        )
         self.horizontalSlider.valueChanged.connect(self.slider_changed)
         self.update_letter_grade()
 
-    def score_changed(self):
-        # self.doubleSpinBox_percentage.disconnect()
-        # self.horizontalSlider.disconnect()
-        self.horizontalSlider.setValue(int(self.get_score()))
-        with contextlib.suppress(ZeroDivisionError):
-            self.doubleSpinBox_percentage.setValue(
-                (self.get_score() / self.get_worth()) * 100
-            )
-        # self.doubleSpinBox_percentage.valueChanged.connect(self.percentage_change)
-        # self.horizontalSlider.valueChanged.connect(self.slider_changed)
-        self.assignment.score = self.get_score()
-        self.update_letter_grade()
+    def input_grade_changed(self):
+        new_grade = self.lineEdit_input.text().strip()
+        if '/' not in new_grade: 
+            worth = 100
+        else:
+            if new_grade.split('/')[-1] == '':
+                return
+            worth = float(new_grade.split('/')[-1])
 
-    def worth_changed(self):
+        score = float(new_grade.split('/')[0])
+        
+        if worth == 0:
+            return
+        
+        self.assignment.score = score
+        self.assignment.worth = worth
+        
         with contextlib.suppress(TypeError):
             self.doubleSpinBox_percentage.disconnect()
-            self.horizontalSlider.disconnect()
         self.doubleSpinBox_percentage.setValue(
-            (self.get_score() / self.get_worth()) * 100
+            score / worth * 100
         )
-        self.horizontalSlider.setValue(int(self.get_percentage()))
-        # self.doubleSpinBox_score.setMaximum(float(self.get_worth()))
-        self.horizontalSlider.setMaximum(int(self.get_worth()))
-        self.doubleSpinBox_percentage.valueChanged.connect(self.percentage_change)
+        with contextlib.suppress(TypeError):
+            self.horizontalSlider.disconnect()
+        self.horizontalSlider.setMaximum(int(worth))
+        self.horizontalSlider.setValue(int(score))
         self.horizontalSlider.valueChanged.connect(self.slider_changed)
-        self.assignment.worth = self.get_worth()
+        self.doubleSpinBox_percentage.valueChanged.connect(self.percentage_change)
         self.update_letter_grade()
 
     def slider_changed(self):
         with contextlib.suppress(TypeError):
             self.doubleSpinBox_percentage.disconnect()
-            self.doubleSpinBox_score.disconnect()
+            self.lineEdit_input.disconnect()
+        self.lineEdit_input.setText(f'{self.horizontalSlider.value()}/{self.get_worth()}')
         self.doubleSpinBox_percentage.setValue(
             (self.horizontalSlider.value() / self.get_worth()) * 100
         )
-        self.doubleSpinBox_score.setValue(
-            self.get_worth() * self.get_percentage() / 100
-        )
+        self.assignment.score = self.horizontalSlider.value()
         self.doubleSpinBox_percentage.valueChanged.connect(self.percentage_change)
-        self.doubleSpinBox_score.valueChanged.connect(self.score_changed)
+        self.lineEdit_input.editingFinished.connect(self.input_grade_changed)
         self.update_letter_grade()
 
     def update_letter_grade(self):
@@ -105,10 +101,10 @@ class GradeSlider(QWidget):
         self.school.save()
 
     def get_score(self) -> float:
-        return self.doubleSpinBox_score.value()
+        return self.assignment.score
 
     def get_worth(self) -> float:
-        return self.doubleSpinBox_worth.value()
+        return self.assignment.worth
 
     def get_percentage(self) -> float:
         return self.doubleSpinBox_percentage.value()

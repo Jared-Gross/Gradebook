@@ -25,7 +25,6 @@ class StudentSummaryWidget(QTreeWidget):
         self.student = student
         self.setColumnCount(2)
         self.setHeaderLabels(["Name", "Score", "%", "Wght", "Ltr Grd"])
-
         self.load_summary()
 
     def load_summary(self):
@@ -43,16 +42,29 @@ class StudentSummaryWidget(QTreeWidget):
             for assignment in self.course.assessments[assessment][self.student]:
                 total_score += assignment.score
                 total_worth += assignment.worth
-                assignment_item = QTreeWidgetItem(
-                    assessment_item,
-                    [
-                        assignment.name,
-                        f"{round(assignment.score, 2)}/{round(assignment.worth, 2)}",
-                        f"{round((assignment.score/assignment.worth)*100, 2)}%",
-                        f"{round((assessment_weight/total_assignments)*(assignment.score/assignment.worth), 2)}/{round(assessment_weight/total_assignments,2)}",
-                        assignment.get_letter_grade(),
-                    ],
-                )
+                if assignment.worth != 0:
+                    weighted_percentage = assignment.score/assignment.worth
+                    assignment_item = QTreeWidgetItem(
+                        assessment_item,
+                        [
+                            assignment.name,
+                            f"{round(assignment.score, 2)}/{round(assignment.worth, 2)}",
+                            f"{round((weighted_percentage)*100, 2)}%",
+                            f"{round((assessment_weight/total_assignments)*(weighted_percentage), 2)}/{round(assessment_weight/total_assignments,2)}",
+                            assignment.get_letter_grade(),
+                        ],
+                    )
+                else:
+                    assignment_item = QTreeWidgetItem(
+                        assessment_item,
+                        [
+                            assignment.name,
+                            f"{round(assignment.score, 2)}/{round(assignment.worth, 2)}",
+                            f"0.0%",
+                            f"0.0/{round(assessment_weight/total_assignments,2)}",
+                            assignment.get_letter_grade(),
+                        ],
+                    )
                 assessment_item.addChild(assignment_item)
 
             # Set the total grade for the assessment
@@ -102,7 +114,6 @@ class StudentSummaryWidget(QTreeWidget):
         header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
 
     def get_letter_grade(self, percentage) -> str:
-        # Define grade ranges and their corresponding letter grades
         grade_ranges = [
             (90, "A+"),
             (85, "A"),

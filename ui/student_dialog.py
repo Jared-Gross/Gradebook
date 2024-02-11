@@ -15,6 +15,7 @@ from utils.course import Course
 from utils.icons import Icons
 from utils.school import School
 from utils.student import Student
+from utils.generate_student_report import StudentReport
 
 
 class StudentDialog(QDialog):
@@ -58,6 +59,9 @@ class StudentDialog(QDialog):
         self.pushButton_add_to_course.clicked.connect(self.add_to_course)
         self.pushButton_remove_from_course.clicked.connect(self.remove_from_course)
         self.pushButton_set_color.clicked.connect(self.set_color)
+        self.pushButton_generate_student_summary.clicked.connect(
+            self.generate_student_summary
+        )
         self.show()
         self.resize(800, 550)
         self.load_courses()
@@ -130,9 +134,14 @@ class StudentDialog(QDialog):
             self.load_courses()
             self.load_summary()
 
+    def generate_student_summary(self):
+        summary = StudentReport(self.school, self.student)
+        summary.generate()
+
     def load_summary(self):
         self.clear_layout(self.verticalLayout_summary)
         courses_tool_box = QToolBox(self)
+        courses_tool_box.setMinimumHeight(len(list(self.enrolled_courses.keys()))*40)
         for course in self.enrolled_courses:
             summary_widget = StudentSummaryWidget(
                 self.enrolled_courses[course], self.student, courses_tool_box

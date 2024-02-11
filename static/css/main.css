@@ -1,0 +1,178 @@
+:root {
+    font-family: Inter, sans-serif;
+    font-feature-settings: 'liga'1, 'calt'1;
+}
+
+@supports (font-variation-settings: normal) {
+    :root {
+        font-family: InterVariable, sans-serif;
+    }
+}
+
+h1 {
+    font-weight: bold;
+}
+
+.tables {
+    margin: 25px;
+}
+
+table.fixed {
+    table-layout: fixed;
+}
+
+table.fixed td {
+    overflow: hidden;
+}
+
+table tr{
+    border-bottom: 1px solid lightgray;
+}
+
+table thead tr{
+    border-bottom: 1px solid gray;
+}
+
+h2 {
+    font-weight: bold;
+    text-align: center;
+    text-overflow: ellipsis;
+    font-size: 20px;
+    margin: 10px;
+}
+
+h3 {
+    text-decoration: underline;
+    font-size: 16px;
+    text-align: left;
+}
+
+.student {
+    text-align: center;
+    border-radius: 15px;
+    border: 1px solid gray;
+    padding: 5px;
+    margin: 10px;
+}
+
+.course {
+    border-radius: 5px;
+    border: 1px solid transparent;
+    margin: 10px;
+    background-color: white;
+}
+
+.assessment {
+    border-top: 1px solid gray;
+    padding: 5px;
+    margin: 10px;
+    cursor: default;
+}
+
+.student_summary {
+    margin: 10px;
+    border-top: 1px solid gray;
+}
+
+summary {
+    list-style: none;
+    border-radius: 14px;
+    background-color: rgb(243, 243, 243);
+    border: 1px solid rgb(235, 235, 235);
+    transition: 0.1s background linear;
+    transition: 0.1s border-color linear;
+}
+
+summary:hover {
+    background-color: lightgray;
+    border-color: gray;
+    transition: 0.1s background linear;
+    transition: 0.1s border-color linear;
+    transition: 0.1s border-radius linear;
+}
+
+details[open] summary {
+    border-radius: 0;
+    border-top-right-radius: 14px;
+    border-top-left-radius: 14px;
+    background-color: white;
+    border-color: white;
+    transition: 0.1s background linear;
+    transition: 0.1s border-color linear;
+    transition: 0.1s border-radius linear;
+}
+
+details[open] summary:hover {
+    background-color: rgb(243, 243, 243);
+    border-color: lightgray;
+    transition: 0.1s background linear;
+    transition: 0.1s border-color linear;
+}
+
+details {
+    cursor: pointer;
+    display: block;
+    position: relative;
+    transition: 1s background linear;
+    margin: 5px;
+}
+
+details:hover,
+details:focus {
+    transition: 0.01s color linear;
+}
+
+details:before {
+    content: "";
+}
+
+details[open] {
+    border: 1px solid gray;
+    background-color: white;
+    border-radius: 15px;
+    animation: animateDownOpen 0.3s color forwards;
+    animation: animateDownOpen 0.3s linear forwards;
+    animation: animateDownOpen 0.3s border forwards;
+}
+
+details:not([open]) {
+    border: 1px solid gray;
+    background-color: white;
+    border-radius: 15px;
+    animation: animateDownClose 0.3s color forwards;
+    animation: animateDownClose 0.3s linear forwards;
+    animation: animateDownClose 0.3s border forwards;
+}
+
+@keyframes animateDownOpen {
+    0% {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes animateDownClose {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-5px);
+    }
+}
+
+@media print {
+
+    details[open] summary {
+        font-size: 0;
+    }
+
+    .page-break {
+        page-break-after: always;
+    }
+}

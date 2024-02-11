@@ -18,8 +18,17 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QTabWidget" name="tabWidget">
+      <property name="tabPosition">
+       <enum>QTabWidget::North</enum>
+      </property>
+      <property name="tabShape">
+       <enum>QTabWidget::Triangular</enum>
+      </property>
       <property name="currentIndex">
        <number>0</number>
+      </property>
+      <property name="documentMode">
+       <bool>false</bool>
       </property>
       <widget class="QWidget" name="tab_students">
        <attribute name="title">
@@ -39,7 +48,7 @@
                <x>0</x>
                <y>0</y>
                <width>1104</width>
-               <height>675</height>
+               <height>681</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0">
@@ -97,7 +106,7 @@
              <x>0</x>
              <y>0</y>
              <width>1370</width>
-             <height>677</height>
+             <height>683</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">

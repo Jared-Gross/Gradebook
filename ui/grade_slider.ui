@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>389</width>
+    <width>429</width>
     <height>70</height>
    </rect>
   </property>
@@ -60,65 +60,32 @@
       </spacer>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_score">
+      <widget class="QLineEdit" name="lineEdit_input">
        <property name="minimumSize">
         <size>
-         <width>80</width>
-         <height>25</height>
+         <width>0</width>
+         <height>40</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>80</width>
-         <height>25</height>
+         <width>100</width>
+         <height>16777215</height>
         </size>
        </property>
        <property name="font">
         <font>
-         <pointsize>7</pointsize>
+         <pointsize>10</pointsize>
         </font>
        </property>
-       <property name="buttonSymbols">
-        <enum>QAbstractSpinBox::UpDownArrows</enum>
+       <property name="inputMask">
+        <string/>
        </property>
-       <property name="accelerated">
-        <bool>true</bool>
+       <property name="placeholderText">
+        <string>score/worth</string>
        </property>
-       <property name="showGroupSeparator" stdset="0">
+       <property name="clearButtonEnabled">
         <bool>false</bool>
-       </property>
-       <property name="maximum">
-        <double>9999999.000000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_worth">
-       <property name="minimumSize">
-        <size>
-         <width>80</width>
-         <height>25</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>80</width>
-         <height>25</height>
-        </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>7</pointsize>
-        </font>
-       </property>
-       <property name="accelerated">
-        <bool>true</bool>
-       </property>
-       <property name="maximum">
-        <double>999999999.000000000000000</double>
-       </property>
-       <property name="value">
-        <double>100.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -413,8 +380,6 @@
   </layout>
  </widget>
  <tabstops>
-  <tabstop>doubleSpinBox_score</tabstop>
-  <tabstop>doubleSpinBox_worth</tabstop>
   <tabstop>horizontalSlider</tabstop>
   <tabstop>doubleSpinBox_percentage</tabstop>
  </tabstops>

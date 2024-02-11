@@ -34,11 +34,13 @@ class StudentWidget(QWidget):
         hover_color = lighten_color(self.student.color, 1.2)
         pressed_color = darken_color(self.student.color, 2)
         background = f"background-color: rgb({background_color.red()}, {background_color.green()}, {background_color.blue()});"
-        hover = 'QWidget#widget:hover { background: rgb(' + f"{hover_color.red()}, {hover_color.green()}, {hover_color.blue()}" + ');}' 
-        normal = "QWidget#widget{" + color + " border-radius: 10px;" + background + "}"
-        self.widget.setStyleSheet(
-            normal + hover
+        hover = (
+            "QWidget#widget:hover { background: rgb("
+            + f"{hover_color.red()}, {hover_color.green()}, {hover_color.blue()}"
+            + ");}"
         )
+        normal = "QWidget#widget{" + color + " border-radius: 10px;" + background + "}"
+        self.widget.setStyleSheet(normal + hover)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:

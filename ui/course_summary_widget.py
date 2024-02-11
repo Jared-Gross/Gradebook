@@ -93,8 +93,6 @@ class CourseSummaryWidget(QWidget):
                         max_x_range = len(x_values)
                         plot.setXRange(0, max_x_range + 1)
                     slope, intercept = linear_regression(x_values, y_values)
-                    x_regression = np.linspace(0, len(x_values) + 1)
-                    y_regression = slope * x_regression + intercept
                     angle_radians = np.arctan(slope)
                     angle_degrees = np.degrees(angle_radians)
                     inf3 = InfiniteLine(

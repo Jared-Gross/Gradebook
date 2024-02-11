@@ -28,6 +28,12 @@ class Course:
         for assessment in self.assessments:
             del self.assessments[assessment][student]
 
+    def student_enrolled(self, other_student: Student) -> bool:
+        for student in self.students:
+            if student == other_student:
+                return True
+        return False
+
     def add_assessment(self, name: str):
         self.assessments[name] = {}
         self.grading.setdefault(name, 0.0)

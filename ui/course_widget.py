@@ -40,7 +40,8 @@ class CourseWidget(QWidget):
         self.assessments: dict[str, QToolBox] = {}
         self.students: dict[str, Student] = {}
         self.last_selected_student: Student = None
-        self.last_selected_assessment: str = list(self.course.assessments)[0]
+        with contextlib.suppress(IndexError):
+            self.last_selected_assessment: str = list(self.course.assessments)[0]
         self.last_selected_row: int = 0
         self.last_selected_grading: str = ""
         self.verticalLayout_summary: QVBoxLayout
@@ -117,6 +118,8 @@ class CourseWidget(QWidget):
         for student in self.course.students:
             self.students[student.name] = student
             self.listWidget_students.addItem(student.name)
+        if len(list(self.students.keys())) == 1:
+            self.listWidget_students.setCurrentRow(0)
 
     def student_double_clicked(self):
         student = self.school.get_student_from_name(
@@ -205,10 +208,11 @@ class CourseWidget(QWidget):
             self.assessment_tab_box.addTab(table_widget, assessment)
         self.assessment_tab_box.currentChanged.connect(self.assessment_tab_box_changed)
         self.assessment_tab_box.enable_save_tab_order()
-
-        self.assessment_tab_box.setCurrentIndex(
-            self.assessment_tab_box.get_tab_order().index(self.last_selected_assessment)
-        )
+        
+        with contextlib.suppress(AttributeError, ValueError):
+            self.assessment_tab_box.setCurrentIndex(
+                self.assessment_tab_box.get_tab_order().index(self.last_selected_assessment)
+            )
         self.horizontalLayout_3.addWidget(self.assessment_tab_box)
 
     def assessment_tab_box_changed(self):

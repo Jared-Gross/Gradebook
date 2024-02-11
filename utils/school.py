@@ -56,12 +56,19 @@ class School:
                 return course
         return None
 
+    def get_enrolled_courses(self, student: Student) -> list[Course]:
+        return [course for course in self.courses if course.student_enrolled(student)]
+
     def load(self) -> dict:
         data = {}
         self.students.clear()
         self.courses.clear()
-        with open(f"{globals.database_location}/{self.name}.json", "r") as file:
-            data = json.load(file)
+        try:
+            with open(f"{globals.database_location}/{self.name}.json", "r") as file:
+                data = json.load(file)
+        except FileNotFoundError:
+            self.save()
+            return
         for student in data["students"]:
             _student = Student()
             _student.from_dict(data=student)

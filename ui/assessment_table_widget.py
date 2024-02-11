@@ -13,6 +13,7 @@ from PyQt6.QtWidgets import (
     QTabWidget,
     QToolBox,
     QWidget,
+    QInputDialog
 )
 
 from ui.grade_slider import GradeSlider
@@ -23,6 +24,7 @@ from utils.course import Course
 from utils.school import School
 from utils.student import Student
 
+from functools import partial
 
 class AssessmentTableWidget(QTableWidget):
     def __init__(
@@ -116,11 +118,31 @@ class AssessmentTableWidget(QTableWidget):
             )
             self.load_coursework()
 
+    def quick_add(self, number_of_elemets):
+        text, ok_pressed = QInputDialog.getText(
+            None, f"Input Dialog for {number_of_elemets} elements", "Enter element name:", text='Element'
+        )
+        if ok_pressed and text:
+            for i in range(number_of_elemets):
+                self.course.add_coursework(
+                    self.assessment, self.student, Assignment(f'{text} {i+1}')
+                )
+            self.school.save()
+            self.load_coursework()
+
     def setup_context_menu(self):
         self.context_menu = QMenu(self)
         delete_action = QAction("Delete", self)
         delete_action.triggered.connect(self.delete)
         self.context_menu.addAction(delete_action)
+        
+        quick_add_menu = QMenu("Quick Add", self)
+        for i in range(15):
+            quick_add = QAction(f"{i+1} elements", quick_add_menu)
+            quick_add.triggered.connect(partial(self.quick_add, i+1))
+            quick_add_menu.addAction(quick_add)
+        
+        self.context_menu.addMenu(quick_add_menu)
 
         self.setContextMenuPolicy(
             Qt.ContextMenuPolicy.CustomContextMenu

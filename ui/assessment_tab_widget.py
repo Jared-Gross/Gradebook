@@ -37,6 +37,7 @@ class AssessmentTabWidget(QTabWidget):
         self.course = course
         self.parent = parent
         self.setMovable(True)
+        self.setTabShape(QTabWidget.TabShape.Triangular)
         self.tabBarDoubleClicked.connect(self.rename_tab)
 
     def rename_tab(self):

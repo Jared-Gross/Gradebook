@@ -36,7 +36,8 @@ class MainMenu(QMainWindow):
         self.setWindowIcon(QIcon(Icons.app_icon))
         self.school = School("Pineland")
         self.school.load()
-        self.last_selected_course: str = self.school.courses[0].name
+        with contextlib.suppress(IndexError):
+            self.last_selected_course: str = self.school.courses[0].name
         self.tabWidget: QTabWidget
         self.load_clicked_events()
         self.load_students()
@@ -162,9 +163,11 @@ class MainMenu(QMainWindow):
             self.courses_widget.add_course(course)
         self.verticalLayout_courses.addWidget(self.courses_widget)
         tab_order = [course.name for course in self.school.courses]
-        self.courses_widget.setCurrentIndex(tab_order.index(self.last_selected_course))
+        with contextlib.suppress(ValueError, AttributeError):
+            self.courses_widget.setCurrentIndex(tab_order.index(self.last_selected_course))
         self.courses_widget.currentChanged.connect(self.courses_tab_changed)
         self.courses_widget.enable_save_tab_order()
+        self.courses_widget.load_tab()
 
     def courses_tab_changed(self):
         self.last_selected_course = self.courses_widget.current_tab()
