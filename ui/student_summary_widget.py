@@ -16,7 +16,7 @@ from utils.assignment import Assignment
 from utils.course import Course
 from utils.school import School
 from utils.student import Student
-
+from utils.letter_grade import get_letter_grade
 
 class StudentSummaryWidget(QTreeWidget):
     def __init__(self, course: Course, student: Student, parent=None):
@@ -105,7 +105,7 @@ class StudentSummaryWidget(QTreeWidget):
             total_item.setData(
                 4,
                 0,
-                f"{self.get_letter_grade(grand_total_weighted_score/grand_total_weight*100)}",
+                f"{get_letter_grade(grand_total_weighted_score/grand_total_weight*100)}",
             )
         except ZeroDivisionError:
             total_item.setData(4, 0, "0.00")
@@ -113,22 +113,3 @@ class StudentSummaryWidget(QTreeWidget):
         header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
         header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
 
-    def get_letter_grade(self, percentage) -> str:
-        grade_ranges = [
-            (90, "A+"),
-            (85, "A"),
-            (80, "A-"),
-            (77, "B+"),
-            (73, "B"),
-            (70, "B-"),
-            (69, "C+"),
-            (63, "C"),
-            (60, "C-"),
-            (50, "D"),
-            (0, "F"),
-        ]
-        for min_percentage, letter_grade in grade_ranges:
-            if percentage >= min_percentage:
-                return letter_grade
-
-        return "F"

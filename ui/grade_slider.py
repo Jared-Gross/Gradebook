@@ -17,7 +17,7 @@ from utils.assignment import Assignment
 from utils.course import Course
 from utils.school import School
 from utils.student import Student
-
+from utils.letter_grade import get_letter_grade
 
 class GradeSlider(QWidget):
     def __init__(self, school: School, assignment: Assignment, parent=None):
@@ -95,7 +95,7 @@ class GradeSlider(QWidget):
         self.update_letter_grade()
 
     def update_letter_grade(self):
-        self.label_letter_grade.setText(self.get_letter_grade())
+        self.label_letter_grade.setText(get_letter_grade(self.get_percentage()))
         self.assignment.worth = self.get_worth()
         self.assignment.score = self.get_score()
         self.school.save()
@@ -108,26 +108,3 @@ class GradeSlider(QWidget):
 
     def get_percentage(self) -> float:
         return self.doubleSpinBox_percentage.value()
-
-    def get_letter_grade(self) -> str:
-        percentage = self.get_percentage()
-
-        # Define grade ranges and their corresponding letter grades
-        grade_ranges = [
-            (90, "A+"),
-            (85, "A"),
-            (80, "A-"),
-            (77, "B+"),
-            (73, "B"),
-            (70, "B-"),
-            (69, "C+"),
-            (63, "C"),
-            (60, "C-"),
-            (50, "D"),
-            (0, "F"),
-        ]
-        for min_percentage, letter_grade in grade_ranges:
-            if percentage >= min_percentage:
-                return letter_grade
-
-        return "F"
