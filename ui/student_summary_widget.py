@@ -18,6 +18,7 @@ from utils.school import School
 from utils.student import Student
 from utils.letter_grade import get_letter_grade
 
+
 class StudentSummaryWidget(QTreeWidget):
     def __init__(self, course: Course, student: Student, parent=None):
         super(StudentSummaryWidget, self).__init__(parent)
@@ -112,4 +113,3 @@ class StudentSummaryWidget(QTreeWidget):
         header = self.header()
         header.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
         header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
-

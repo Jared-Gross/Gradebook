@@ -19,6 +19,7 @@ from utils.school import School
 from utils.student import Student
 from utils.letter_grade import get_letter_grade
 
+
 class GradeSlider(QWidget):
     def __init__(self, school: School, assignment: Assignment, parent=None):
         super(GradeSlider, self).__init__(parent)
