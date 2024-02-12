@@ -47,6 +47,8 @@ class AssessmentTableWidget(QTableWidget):
         self.last_selected_assignment: str = ""
         self.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.setSelectionMode(QTableWidget.SelectionMode.SingleSelection)
+        self.setVerticalScrollMode(QTableWidget.ScrollMode.ScrollPerPixel)
+        self.setHorizontalScrollMode(QTableWidget.ScrollMode.ScrollPerPixel)
         self.load_coursework()
         self.setup_context_menu()
 

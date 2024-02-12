@@ -12,7 +12,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Gradiance</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
@@ -94,7 +94,46 @@
        <attribute name="title">
         <string>Courses</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,1">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,1,0">
+          <property name="spacing">
+           <number>6</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Courses:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="courses_list_widget_layout">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QPushButton" name="pushButton_add_course">
+              <property name="text">
+               <string>Add Course</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButton_remove_course">
+              <property name="text">
+               <string>Remove Course</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
         <item>
          <widget class="QScrollArea" name="scrollArea">
           <property name="widgetResizable">
@@ -105,7 +144,7 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1370</width>
+             <width>1195</width>
              <height>683</height>
             </rect>
            </property>

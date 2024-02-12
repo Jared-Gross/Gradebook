@@ -14,12 +14,14 @@ from PyQt6.QtWidgets import (
     QTabWidget,
     QVBoxLayout,
     QWidget,
+    QListWidget,
 )
 
 from ui.add_student import AddStudent
 from ui.courses_tab_widget import CoursesTabWidget
 from ui.student import StudentWidget
 from ui.student_dialog import StudentDialog
+from ui.courses_list_widget import CoursesListWidget
 from utils import globals
 from utils.assignment import Assignment
 from utils.course import Course
@@ -32,13 +34,15 @@ class MainMenu(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("ui/main_menu.ui", self)
-        self.setWindowTitle("Gradiance")
         self.setWindowIcon(QIcon(Icons.app_icon))
         self.school = School("Pineland")
         self.school.load()
         with contextlib.suppress(IndexError):
             self.last_selected_course: str = self.school.courses[0].name
         self.tabWidget: QTabWidget
+        self.listWidget_students: QListWidget
+        self.listWidget_courses = CoursesListWidget(self.school, self)
+        self.courses_list_widget_layout.addWidget(self.listWidget_courses)
         self.load_clicked_events()
         self.load_students()
         self.load_courses()
@@ -48,8 +52,15 @@ class MainMenu(QMainWindow):
         self.tabWidget.tabBarClicked.connect(self.main_tab_clicked)
         self.pushButton_add_student.clicked.connect(self.add_student)
         self.listWidget_students.itemDoubleClicked.connect(self.open_student_dialog)
+        self.listWidget_courses.itemClicked.connect(
+            self.list_widget_courses_selection_changed
+        )
+        self.listWidget_courses.itemDoubleClicked.connect(self.rename_tab)
+        self.listWidget_courses.dropEventOccurred.connect(self.save_courses_tab_order)
         self.actionAdd_Course.triggered.connect(self.add_course)
+        self.pushButton_add_course.clicked.connect(self.add_course)
         self.actionDelete_Course.triggered.connect(self.delete_course)
+        self.pushButton_remove_course.clicked.connect(self.delete_course)
         self.actionAdd_Student.triggered.connect(self.add_student)
         self.actionDelete_Student.triggered.connect(self.delete_student)
 
@@ -59,6 +70,40 @@ class MainMenu(QMainWindow):
         )
         student_dialog = StudentDialog(student, self.school, self)
         student_dialog.show()
+
+    def list_widget_courses_selection_changed(self):
+        tab_order = self.courses_widget.get_tab_order()
+        self.courses_widget.setCurrentIndex(
+            tab_order.index(self.listWidget_courses.currentItem().text())
+        )
+        self.last_selected_course = self.courses_widget.current_tab()
+
+    def rename_tab(self):
+        old_name = self.listWidget_courses.currentItem().text()
+        text, ok_pressed = QInputDialog.getText(
+            self, "Input Dialog", "Enter course name:", text=old_name
+        )
+        if ok_pressed and text:
+            for course in self.school.courses:
+                if course.name == old_name:
+                    course.name = text
+                    self.school.save()
+                    break
+            self.last_selected_course = text
+            self.load_courses()
+
+    def save_courses_tab_order(self):
+        tab_order = [
+            self.listWidget_courses.item(i).text()
+            for i in range(self.listWidget_courses.count())
+        ]
+        courses_order: list[Course] = []
+        for tab in tab_order:
+            for course in self.school.courses:
+                if tab == course.name:
+                    courses_order.append(course)
+        self.school.courses = courses_order
+        self.school.save()
 
     def add_student(self):
         dialog = AddStudent(self)
@@ -158,21 +203,25 @@ class MainMenu(QMainWindow):
 
     def load_courses(self):
         self.clear_layout(self.verticalLayout_courses)
+        self.listWidget_courses.clear()
         self.courses_widget = CoursesTabWidget(self.school, self)
         for course in self.school.courses:
             self.courses_widget.add_course(course)
+            self.listWidget_courses.addItem(course.name)
         self.verticalLayout_courses.addWidget(self.courses_widget)
         tab_order = [course.name for course in self.school.courses]
-        with contextlib.suppress(ValueError, AttributeError):
+        self.courses_widget.enable()
+        try:
             self.courses_widget.setCurrentIndex(
                 tab_order.index(self.last_selected_course)
             )
-        self.courses_widget.currentChanged.connect(self.courses_tab_changed)
-        self.courses_widget.enable_save_tab_order()
+            self.listWidget_courses.setCurrentRow(
+                tab_order.index(self.last_selected_course)
+            )
+        except (AttributeError, ValueError):
+            self.courses_widget.setCurrentIndex(0)
+            self.listWidget_courses.setCurrentRow(0)
         self.courses_widget.load_tab()
-
-    def courses_tab_changed(self):
-        self.last_selected_course = self.courses_widget.current_tab()
 
     def main_tab_clicked(self, index):
         current_tab = self.tabWidget.tabText(index).lower()

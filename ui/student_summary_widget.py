@@ -27,6 +27,8 @@ class StudentSummaryWidget(QTreeWidget):
         self.setColumnCount(2)
         self.setHeaderLabels(["Name", "Score", "%", "Wght", "Ltr Grd"])
         self.load_summary()
+        self.setVerticalScrollMode(QTreeWidget.ScrollMode.ScrollPerPixel)
+        self.setHorizontalScrollMode(QTreeWidget.ScrollMode.ScrollPerPixel)
 
     def load_summary(self):
         grand_total_score = 0.0
