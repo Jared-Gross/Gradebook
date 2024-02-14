@@ -29,7 +29,10 @@ class CoursesTabWidget(QTabWidget):
 
     def load_tab(self):
         course_name = self.current_tab()
-        course_widget = CourseWidget(self.courses[course_name], self.school, self)
+        try:
+            course_widget = CourseWidget(self.courses[course_name], self.school, self)
+        except KeyError: # No courses have been added yet
+            return
         self.blockSignals(True)
         self.insertTab(self.currentIndex(), course_widget, course_name)
         # NOTE With out this if statement you cannot select the last tab

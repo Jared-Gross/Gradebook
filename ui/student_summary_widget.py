@@ -44,14 +44,14 @@ class StudentSummaryWidget(QTreeWidget):
             assessment_item = QTreeWidgetItem(self, [assessment, "", "", "", ""])
             for assignment in self.course.assessments[assessment][self.student]:
                 total_score += assignment.score
-                total_worth += assignment.worth
-                if assignment.worth != 0:
-                    weighted_percentage = assignment.score / assignment.worth
+                total_worth += assignment.template.worth
+                if assignment.template.worth != 0:
+                    weighted_percentage = assignment.score / assignment.template.worth
                     assignment_item = QTreeWidgetItem(
                         assessment_item,
                         [
-                            assignment.name,
-                            f"{round(assignment.score, 2)}/{round(assignment.worth, 2)}",
+                            assignment.template.name,
+                            f"{round(assignment.score, 2)}/{round(assignment.template.worth, 2)}",
                             f"{round((weighted_percentage)*100, 2)}%",
                             f"{round((assessment_weight/total_assignments)*(weighted_percentage), 2)}/{round(assessment_weight/total_assignments,2)}",
                             assignment.get_letter_grade(),
@@ -61,8 +61,8 @@ class StudentSummaryWidget(QTreeWidget):
                     assignment_item = QTreeWidgetItem(
                         assessment_item,
                         [
-                            assignment.name,
-                            f"{round(assignment.score, 2)}/{round(assignment.worth, 2)}",
+                            assignment.template.name,
+                            f"{round(assignment.score, 2)}/{round(assignment.template.worth, 2)}",
                             f"0.0%",
                             f"0.0/{round(assessment_weight/total_assignments,2)}",
                             assignment.get_letter_grade(),

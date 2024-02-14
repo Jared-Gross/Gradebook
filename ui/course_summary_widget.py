@@ -66,7 +66,7 @@ class CourseSummaryWidget(QWidget):
         assignemnts = set()
         for student in self.course.assessments[assessment]:
             for assignment in self.course.assessments[assessment][student]:
-                assignemnts.add(assignment.name)
+                assignemnts.add(assignment.template.name)
         return list(assignemnts)
 
     def load_graphs(self):

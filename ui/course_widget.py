@@ -88,9 +88,12 @@ class CourseWidget(QWidget):
         )
 
         if ok_pressed and item:
-            self.course.add_student(self.school.get_student_from_name(item))
+            new_student = self.school.get_student_from_name(item)
+            self.course.add_student(new_student)
+            self.course.sync_assignments(new_student)
             self.school.save()
             self.load_students()
+            self.listWidget_students.setCurrentRow(self.last_selected_row)
 
     def remove_student(self):
         students = [student.name for student in self.course.students]
@@ -103,15 +106,17 @@ class CourseWidget(QWidget):
         )
 
         if ok_pressed and item:
+            del self.students[item]
             self.course.remove_student(self.school.get_student_from_name(item))
             self.school.save()
             self.load_students()
 
     def student_changed(self):
-        selected_student = self.listWidget_students.currentItem().text()
-        self.load_assessments(self.students[selected_student])
-        self.last_selected_student = self.students[selected_student]
-        self.last_selected_row = self.listWidget_students.currentRow()
+        with contextlib.suppress(KeyError): # For when a student is removed
+            selected_student = self.listWidget_students.currentItem().text()
+            self.load_assessments(self.students[selected_student])
+            self.last_selected_student = self.students[selected_student]
+            self.last_selected_row = self.listWidget_students.currentRow()
 
     def load_students(self):
         self.listWidget_students.clear()

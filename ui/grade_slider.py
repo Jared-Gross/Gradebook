@@ -26,20 +26,20 @@ class GradeSlider(QWidget):
         uic.loadUi("ui/grade_slider.ui", self)
         self.school = school
         self.assignment = assignment
-        self.horizontalSlider.setMaximum(int(assignment.worth))
+        self.horizontalSlider.setMaximum(int(self.assignment.template.worth))
         self.horizontalSlider.wheelEvent = lambda event: event.ignore()
-        self.lineEdit_input.setText(f"{self.assignment.score}/{self.assignment.worth}")
+        self.lineEdit_input.setText(f"{self.assignment.score}/{self.assignment.template.worth}")
         regex = QRegularExpression("[-]?[0-9]+[,.]?[0-9]*([\/][0-9]+[,.]?[0-9]*)*")
         validator = QRegularExpressionValidator(regex)
         self.lineEdit_input.setValidator(validator)
         self.doubleSpinBox_percentage.wheelEvent = lambda event: event.ignore()
         try:
             self.doubleSpinBox_percentage.setValue(
-                assignment.score / assignment.worth * 100
+                self.assignment.score / self.assignment.template.worth * 100
             )
         except ZeroDivisionError:
             self.doubleSpinBox_percentage.setValue(0.0)
-        self.horizontalSlider.setValue(int(assignment.score))
+        self.horizontalSlider.setValue(int(self.assignment.score))
         self.doubleSpinBox_percentage.valueChanged.connect(self.percentage_change)
         self.horizontalSlider.valueChanged.connect(self.slider_changed)
         self.lineEdit_input.editingFinished.connect(self.input_grade_changed)
@@ -67,7 +67,7 @@ class GradeSlider(QWidget):
             return
 
         self.assignment.score = score
-        self.assignment.worth = worth
+        self.assignment.template.worth = worth
 
         with contextlib.suppress(TypeError):
             self.doubleSpinBox_percentage.disconnect()
@@ -97,7 +97,7 @@ class GradeSlider(QWidget):
 
     def update_letter_grade(self):
         self.label_letter_grade.setText(get_letter_grade(self.get_percentage()))
-        self.assignment.worth = self.get_worth()
+        self.assignment.template.worth = self.get_worth()
         self.assignment.score = self.get_score()
         self.school.save()
 
@@ -105,7 +105,7 @@ class GradeSlider(QWidget):
         return self.assignment.score
 
     def get_worth(self) -> float:
-        return self.assignment.worth
+        return self.assignment.template.worth
 
     def get_percentage(self) -> float:
         return self.doubleSpinBox_percentage.value()

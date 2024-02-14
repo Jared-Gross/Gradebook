@@ -20,6 +20,7 @@ from ui.grade_slider import GradeSlider
 from ui.student import StudentWidget
 from utils import globals
 from utils.assignment import Assignment
+from utils.assignment_template import AssignmentTemplate
 from utils.course import Course
 from utils.school import School
 from utils.student import Student
@@ -69,9 +70,13 @@ class AssessmentTableWidget(QTableWidget):
                         self.student,
                         self.table[self.last_selected_assignment].assignment,
                     )
+                    for student in self.course.students:
+                        if student == self.student:
+                            continue
+                        self.course.sync_assignments(student)
                     self.load_coursework()
             else:
-                self.table[self.last_selected_assignment].assignment.name = self.item(
+                self.table[self.last_selected_assignment].assignment.template.name = self.item(
                     changed_row, 0
                 ).text()
             self.school.save()
@@ -79,9 +84,17 @@ class AssessmentTableWidget(QTableWidget):
             assignment_name = self.item(changed_row, 0).text()
             if assignment_name == "":
                 return
+            template = self.course.get_template(self.assessment, assignment_name)
+            if template == None:
+                template = AssignmentTemplate(assignment_name, 0.0)
+                self.course.add_template(self.assessment, template)
             self.course.add_coursework(
-                self.assessment, self.student, Assignment(assignment_name)
+                self.assessment, self.student, Assignment(template)
             )
+            for student in self.course.students:
+                if student == self.student:
+                    continue
+                self.course.sync_assignments(student)
             self.school.save()
             self.load_coursework()
 
@@ -96,9 +109,9 @@ class AssessmentTableWidget(QTableWidget):
         for row, coursework in enumerate(
             self.course.assessments[self.assessment][self.student]
         ):
-            self.setItem(row, 0, QTableWidgetItem(coursework.name))
+            self.setItem(row, 0, QTableWidgetItem(coursework.template.name))
             grade_slider = GradeSlider(self.school, coursework, self)
-            self.table[coursework.name] = grade_slider
+            self.table[coursework.template.name] = grade_slider
             self.setCellWidget(row, 1, grade_slider)
         self.resizeColumnsToContents()
         header = self.horizontalHeader()
@@ -119,6 +132,10 @@ class AssessmentTableWidget(QTableWidget):
             self.course.remove_coursework(
                 self.assessment, self.student, assignment_to_delete
             )
+            for student in self.course.students:
+                if student == self.student:
+                    continue
+                self.course.sync_assignments(student)
             self.load_coursework()
 
     def quick_add(self, number_of_elemets):
@@ -130,9 +147,18 @@ class AssessmentTableWidget(QTableWidget):
         )
         if ok_pressed and text:
             for i in range(number_of_elemets):
+                assignment_name = f"{text} {i+1}"
+                template = self.course.get_template(self.assessment, assignment_name)
+                if template == None:
+                    template = AssignmentTemplate(assignment_name, 0.0)
+                    self.course.add_template(self.assessment, template)
                 self.course.add_coursework(
-                    self.assessment, self.student, Assignment(f"{text} {i+1}")
+                    self.assessment, self.student, Assignment(template)
                 )
+            for student in self.course.students:
+                if student == self.student:
+                    continue
+                self.course.sync_assignments(student)
             self.school.save()
             self.load_coursework()
 
@@ -152,5 +178,5 @@ class AssessmentTableWidget(QTableWidget):
 
         self.setContextMenuPolicy(
             Qt.ContextMenuPolicy.CustomContextMenu
-        )  # Qt.ContextMenuPolicy.CustomContextMenu
+        )
         self.customContextMenuRequested.connect(self.show_context_menu)
