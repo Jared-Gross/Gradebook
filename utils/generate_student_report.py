@@ -4,6 +4,7 @@ from utils.school import School
 from utils.student import Student
 from utils import globals
 
+from utils.letter_grade import get_letter_grade
 
 class StudentReport:
     def __init__(self, school: School, student: Student):
@@ -76,14 +77,14 @@ class StudentReport:
                         table_rows += "<tr>"
                         row_data = ""
                         for data in [
-                            assignment.name,
-                            f"{assignment.score}/{assignment.worth}",
+                            assignment.template.name,
+                            f"{assignment.score}/{assignment.template.worth}",
                             f"{round(assignment.get_percentage(), 2)}%",
                             assignment.get_letter_grade(),
                         ]:
                             row_data += f"<td>{data}</td>"
                         assessment_total_score += assignment.score
-                        assessment_total_worth += assignment.worth
+                        assessment_total_worth += assignment.template.worth
                         table_rows += row_data
                         table_rows += "</tr>"
                 if assessment_total_worth != 0:
@@ -93,10 +94,10 @@ class StudentReport:
                         / assessment_total_worth
                     )
                     course_total_weighted_worth += course.grading[assessment]
-                    table_rows += f"<tr><td><b>Total</b></td><td><b>{round(course.grading[assessment] * assessment_total_score / assessment_total_worth, 2)}/{round(course.grading[assessment], 2)}</b></td><td><b>{round(assessment_total_score / assessment_total_worth * 100,2)}%</b></td><td><b>{self.get_letter_grade(assessment_total_score/assessment_total_worth*100)}</b></td></tr>"
+                    table_rows += f"<tr><td><b>Total</b></td><td><b>{round(course.grading[assessment] * assessment_total_score / assessment_total_worth, 2)}/{round(course.grading[assessment], 2)}</b></td><td><b>{round(assessment_total_score / assessment_total_worth * 100,2)}%</b></td><td><b>{get_letter_grade(assessment_total_score/assessment_total_worth*100)}</b></td></tr>"
                 else:
                     course_total_weighted_worth += course.grading[assessment]
-                    table_rows += f"<tr><td><b>Total</b></td><td><b>0.0/{round(course.grading[assessment], 2)}</b></td><td><b>0.0%</b></td><td><b>{self.get_letter_grade(0.0)}</b></td></tr>"
+                    table_rows += f"<tr><td><b>Total</b></td><td><b>0.0/{round(course.grading[assessment], 2)}</b></td><td><b>0.0%</b></td><td><b>{get_letter_grade(0.0)}</b></td></tr>"
 
                 table_html += table_rows
                 table_html += "</tbody>"
@@ -107,7 +108,7 @@ class StudentReport:
                 course_total_worth += assessment_total_worth
             grand_total_weighted_score += course_total_weighted_score
             grand_total_weighted_worth += course_total_weighted_worth
-            summary_html += f'<tr><td><a href="#{course.name}">{course.name}</a></td><td>{round(course_total_score, 2)}/{round(course_total_worth, 2)}</td><td>{round(course_total_weighted_score, 2)}/{course_total_weighted_worth}</td><td>{round(course_total_weighted_score, 2)}%</td><td>{self.get_letter_grade(course_total_weighted_score/course_total_weighted_worth*100)}</td></tr>'
+            summary_html += f'<tr><td><a href="#{course.name}">{course.name}</a></td><td>{round(course_total_score, 2)}/{round(course_total_worth, 2)}</td><td>{round(course_total_weighted_score, 2)}/{course_total_weighted_worth}</td><td>{round(course_total_weighted_score, 2)}%</td><td>{get_letter_grade(course_total_weighted_score/course_total_weighted_worth*100)}</td></tr>'
             course_html += '<div class="page-break"></div>'
             course_html += "</div>"
             course_html += "</div>"
@@ -116,7 +117,7 @@ class StudentReport:
             grand_total_score += course_total_score
             grand_total_worth += course_total_worth
 
-        summary_html += f"<tr><td><b>Grand total</b></td><td><b>{round(grand_total_score, 2)}/{grand_total_worth}</b></td><td><b>{round(grand_total_weighted_score, 2)}/{grand_total_weighted_worth}</b></td><td><b>{round(grand_total_weighted_score/grand_total_weighted_worth*100,2)}%</b></td><td><b>{self.get_letter_grade(grand_total_weighted_score/grand_total_weighted_worth*100)}</b></td></tr>"
+        summary_html += f"<tr><td><b>Grand total</b></td><td><b>{round(grand_total_score, 2)}/{grand_total_worth}</b></td><td><b>{round(grand_total_weighted_score, 2)}/{grand_total_weighted_worth}</b></td><td><b>{round(grand_total_weighted_score/grand_total_weighted_worth*100,2)}%</b></td><td><b>{get_letter_grade(grand_total_weighted_score/grand_total_weighted_worth*100)}</b></td></tr>"
         summary_html += "</table>"
         summary_html += "</div>"
 
@@ -132,25 +133,6 @@ class StudentReport:
             f.write(self.generated_html_file)
 
         return self.generated_html_file
-
-    def get_letter_grade(self, percentage) -> str:
-        grade_ranges = [
-            (90, "A+"),
-            (85, "A"),
-            (80, "A-"),
-            (77, "B+"),
-            (73, "B"),
-            (70, "B-"),
-            (69, "C+"),
-            (63, "C"),
-            (60, "C-"),
-            (50, "D"),
-            (0, "F"),
-        ]
-        for min_percentage, letter_grade in grade_ranges:
-            if percentage >= min_percentage:
-                return letter_grade
-        return "F"
 
     def load_imports(self):
         self.generated_html_file = self.generated_html_file.replace(

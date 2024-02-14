@@ -35,7 +35,7 @@ class MainMenu(QMainWindow):
         super().__init__()
         uic.loadUi("ui/main_menu.ui", self)
         self.setWindowIcon(QIcon(Icons.app_icon))
-        self.school = School("Test")
+        self.school = School("Pineland")
         self.school.load()
         with contextlib.suppress(IndexError):
             self.last_selected_course: str = self.school.courses[0].name
