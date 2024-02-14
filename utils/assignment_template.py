@@ -1,7 +1,7 @@
 class AssignmentTemplate:
     def __init__(self, name: str = "", worth: float = 0.0) -> None:
-        self.name: str = name
-        self.worth: float = worth
+        self.name = name
+        self.worth = worth
 
     def to_dict(self) -> dict:
         return {"name": self.name, "worth": self.worth}

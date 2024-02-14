@@ -1,9 +1,11 @@
 import contextlib
+import os
+from functools import partial
 
 import ujson as json
 from PyQt6 import uic
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QIcon
+from PyQt6.QtCore import Qt, QSettings
+from PyQt6.QtGui import QIcon, QAction
 from PyQt6.QtWidgets import (
     QDialog,
     QGroupBox,
@@ -15,6 +17,7 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QWidget,
     QListWidget,
+    QMenu
 )
 
 from ui.add_student import AddStudent
@@ -34,16 +37,20 @@ class MainMenu(QMainWindow):
     def __init__(self):
         super().__init__()
         uic.loadUi("ui/main_menu.ui", self)
+        self.settings = QSettings("TheCodingJ's", "Gradiance", self)
         self.setWindowIcon(QIcon(Icons.app_icon))
-        self.school = School("Pineland")
+        self.school = School(self.settings.value("last_opened_school", os.listdir('database')[0], type=str))
         self.school.load()
         with contextlib.suppress(IndexError):
-            self.last_selected_course: str = self.school.courses[0].name
+            # self.settings.setValue("last_selected_course", self.school.courses[0].name)
+            self.last_selected_course: str = self.settings.value("last_selected_course", self.school.courses[0].name, type=str)
         self.tabWidget: QTabWidget
+        self.tabWidget.setCurrentIndex(self.settings.value("last_opened_tab", 0, type=int))
         self.listWidget_students: QListWidget
         self.listWidget_courses = CoursesListWidget(self.school, self)
         self.courses_list_widget_layout.addWidget(self.listWidget_courses)
         self.load_clicked_events()
+        self.load_schools()
         self.load_students()
         self.load_courses()
         self.showMaximized()
@@ -63,6 +70,8 @@ class MainMenu(QMainWindow):
         self.pushButton_remove_course.clicked.connect(self.delete_course)
         self.actionAdd_Student.triggered.connect(self.add_student)
         self.actionDelete_Student.triggered.connect(self.delete_student)
+        self.actionAdd_New_School.triggered.connect(self.add_school)
+        self.actionRemove_School.triggered.connect(self.delete_school)
 
     def open_student_dialog(self):
         student = self.school.get_student_from_name(
@@ -77,6 +86,7 @@ class MainMenu(QMainWindow):
             tab_order.index(self.listWidget_courses.currentItem().text())
         )
         self.last_selected_course = self.courses_widget.current_tab()
+        self.settings.setValue("last_selected_course", self.last_selected_course)
 
     def rename_tab(self):
         old_name = self.listWidget_courses.currentItem().text()
@@ -90,6 +100,7 @@ class MainMenu(QMainWindow):
                     self.school.save()
                     break
             self.last_selected_course = text
+            self.settings.setValue("last_selected_course", self.last_selected_course)
             self.load_courses()
 
     def save_courses_tab_order(self):
@@ -213,17 +224,59 @@ class MainMenu(QMainWindow):
         self.courses_widget.enable()
         try:
             self.courses_widget.setCurrentIndex(
-                tab_order.index(self.last_selected_course)
+                tab_order.index(self.settings.value("last_selected_course", "", type=str))
             )
             self.listWidget_courses.setCurrentRow(
-                tab_order.index(self.last_selected_course)
+                tab_order.index(self.settings.value("last_selected_course", "", type=str))
             )
         except (AttributeError, ValueError):
-            self.courses_widget.setCurrentIndex(0)
-            self.listWidget_courses.setCurrentRow(0)
+            self.courses_widget.setCurrentIndex(tab_order.index(self.last_selected_course))
+            self.listWidget_courses.setCurrentRow(tab_order.index(self.last_selected_course))
         self.courses_widget.load_tab()
 
-    def main_tab_clicked(self, index):
+    def add_school(self):
+        self.school.save()
+        text, ok_pressed = QInputDialog.getText(
+            self, "Input Dialog", "Enter school name:"
+        )
+        if ok_pressed and text:
+            self.school = School(text)
+            self.school.load()
+            self.load_schools()
+            self.load_courses()
+
+    def delete_school(self):
+        self.school.save()
+        schools = os.listdir('database')
+
+        item, ok_pressed = QInputDialog.getItem(
+            None, "Select course", "Choose a course to delete:", schools, editable=False
+        )
+        if ok_pressed and item:
+            schools.remove(item)
+            if self.school.name == item:
+                self.school = School(schools[0])
+                self.school.save()
+            self.load_schools()
+            os.remove(f"{globals.database_location}/{item}")
+            
+    def load_school(self, school_name: str):
+        self.settings.setValue("last_opened_school", school_name)
+        self.school.save()
+        self.school = School(school_name)
+        self.school.load()
+        self.load_students()
+        self.load_courses()
+
+    def load_schools(self):
+        self.menuLoad_School.clear()
+        for school in os.listdir('database'):
+            action = QAction(school, self.menuLoad_School)
+            action.triggered.connect(partial(self.load_school, school))
+            self.menuLoad_School.addAction(action)
+
+    def main_tab_clicked(self, index: int):
+        self.settings.setValue("last_opened_tab", index)
         current_tab = self.tabWidget.tabText(index).lower()
         if current_tab == "students":
             self.load_students()

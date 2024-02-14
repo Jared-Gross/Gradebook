@@ -11,9 +11,8 @@ from utils.student import Student
 class School:
     def __init__(self, name: str) -> None:
         self.name: str = name
-        globals.database_location += f"/{self.name}"
-        if not os.path.exists(globals.database_location):
-            os.makedirs(globals.database_location)
+        if not os.path.exists(f"{globals.database_location}/{self.name}"):
+            os.makedirs(f"{globals.database_location}/{self.name}")
         self.students: list[Student] = []
         self.courses: list[Course] = []
         self.data = {"students": self.students, "courses": self.courses}
@@ -39,7 +38,7 @@ class School:
         return data
 
     def save(self):
-        with open(f"{globals.database_location}/{self.name}.json", "w") as file:
+        with open(f"{globals.database_location}/{self.name}/{self.name}.json", "w") as file:
             json.dump(self.to_dict(), file, indent=4)
 
     def get_student(self, id: str) -> Student:
@@ -68,7 +67,7 @@ class School:
         self.students.clear()
         self.courses.clear()
         try:
-            with open(f"{globals.database_location}/{self.name}.json", "r") as file:
+            with open(f"{globals.database_location}/{self.name}/{self.name}.json", "r") as file:
                 data = json.load(file)
         except FileNotFoundError:
             self.save()

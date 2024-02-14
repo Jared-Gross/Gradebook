@@ -14,9 +14,9 @@ class Course:
         self.students: list[Student] = []
         self.assignment_templates: dict[str, list[AssignmentTemplate]] = {}
         self.assessments: dict[str, dict[Student, list[Assignment]]] = {}
-        newpath = f"{globals.database_location}/{self.name}"
-        if not os.path.exists(newpath):
-            os.makedirs(newpath)
+        # newpath = f"{globals.database_location}/{self.name}"
+        # if not os.path.exists(newpath):
+        #     os.makedirs(newpath)
 
     def add_student(self, student: Student):
         self.students.append(student)

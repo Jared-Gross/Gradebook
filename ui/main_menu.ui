@@ -200,6 +200,22 @@
     <addaction name="actionAdd_Student"/>
     <addaction name="actionDelete_Student"/>
    </widget>
+   <widget class="QMenu" name="menuSchools">
+    <property name="title">
+     <string>Schools</string>
+    </property>
+    <widget class="QMenu" name="menuLoad_School">
+     <property name="title">
+      <string>Load School</string>
+     </property>
+     <addaction name="actionBlank"/>
+    </widget>
+    <addaction name="actionAdd_New_School"/>
+    <addaction name="actionRemove_School"/>
+    <addaction name="separator"/>
+    <addaction name="menuLoad_School"/>
+   </widget>
+   <addaction name="menuSchools"/>
    <addaction name="menuCourses"/>
    <addaction name="menuStudents"/>
   </widget>
@@ -222,6 +238,21 @@
   <action name="actionDelete_Student">
    <property name="text">
     <string>Delete Student</string>
+   </property>
+  </action>
+  <action name="actionAdd_New_School">
+   <property name="text">
+    <string>Add New School</string>
+   </property>
+  </action>
+  <action name="actionRemove_School">
+   <property name="text">
+    <string>Remove School</string>
+   </property>
+  </action>
+  <action name="actionBlank">
+   <property name="text">
+    <string>Blank</string>
    </property>
   </action>
  </widget>
