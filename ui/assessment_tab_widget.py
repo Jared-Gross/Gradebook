@@ -71,7 +71,6 @@ class AssessmentTabWidget(QTabWidget):
     def save_tab_order(self):
         tab_order = self.get_tab_order()
         new_order: dict[str, Student] = {}
-        # self.school.courses
         for tab in tab_order:
             for assessment in self.course.assessments:
                 if tab == assessment:

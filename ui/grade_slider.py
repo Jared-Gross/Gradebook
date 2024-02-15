@@ -28,7 +28,9 @@ class GradeSlider(QWidget):
         self.assignment = assignment
         self.horizontalSlider.setMaximum(int(self.assignment.template.worth))
         self.horizontalSlider.wheelEvent = lambda event: event.ignore()
-        self.lineEdit_input.setText(f"{self.assignment.score}/{self.assignment.template.worth}")
+        self.lineEdit_input.setText(
+            f"{self.assignment.score}/{self.assignment.template.worth}"
+        )
         regex = QRegularExpression("[-]?[0-9]+[,.]?[0-9]*([\/][0-9]+[,.]?[0-9]*)*")
         validator = QRegularExpressionValidator(regex)
         self.lineEdit_input.setValidator(validator)

@@ -6,6 +6,7 @@ from utils import globals
 
 from utils.letter_grade import get_letter_grade
 
+
 class StudentReport:
     def __init__(self, school: School, student: Student):
         self.school = school

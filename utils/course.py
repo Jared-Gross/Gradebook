@@ -50,7 +50,7 @@ class Course:
     def rename_assessment(self, old_name: str, new_name: str):
         self.assessments[new_name] = self.assessments[old_name]
         del self.assessments[old_name]
-        
+
         self.assignment_templates[new_name] = self.assignment_templates[old_name]
         del self.assignment_templates[old_name]
 
@@ -68,35 +68,40 @@ class Course:
         else:
             self.assignment_templates[assessment].append(new_template)
 
-    def does_template_exist(self, assessment: str, other_template: AssignmentTemplate) -> bool:
+    def does_template_exist(
+        self, assessment: str, other_template: AssignmentTemplate
+    ) -> bool:
         for template in self.assignment_templates[assessment]:
             if template.name == other_template.name:
                 return True
         return False
 
-    def get_template(self, assessment: str, template_name: str) -> AssignmentTemplate | None:
+    def get_template(
+        self, assessment: str, template_name: str
+    ) -> AssignmentTemplate | None:
         for template in self.assignment_templates[assessment]:
             if template.name == template_name:
                 return template
         return None
-    
+
     def sync_assignments(self, student: Student):
         for assessment, templates in self.assignment_templates.items():
             assignments = copy.copy(self.assessments[assessment][student])
             new_assignemts: list[Assignment] = []
+
             def get_score(other_assignment: Assignment) -> float:
                 for assignment in assignments:
                     if assignment.template.name == other_assignment.template.name:
                         return assignment.score
                 return 0.0
-            
+
             for template in templates:
                 assignment = Assignment(template)
                 assignment.score = get_score(assignment)
                 new_assignemts.append(assignment)
             self.assessments[assessment][student] = new_assignemts
-                # self.add_coursework(assessment, student, assignment)
-    
+            # self.add_coursework(assessment, student, assignment)
+
     def add_coursework(self, assessment: str, student: Student, assignment: Assignment):
         self.assessments[assessment][student].append(assignment)
         # template = AssignmentTemplate(assignment.name, assignment.worth)
@@ -113,8 +118,7 @@ class Course:
                 if assignment.template.name == assignment_to_delete:
                     self.assessments[assessment][student].remove(assignment)
                     self.assignment_templates[assessment].remove(assignment.template)
-                    
-    
+
     def load_coursework(self):
         for assessment, templates in self.assignment_templates.items():
             for template in templates:
@@ -123,7 +127,12 @@ class Course:
                         assignment.template = template
 
     def to_dict(self) -> dict:
-        data = {"students": [], "assignment_templates": {}, "assessments": {}, "grading": self.grading}
+        data = {
+            "students": [],
+            "assignment_templates": {},
+            "assessments": {},
+            "grading": self.grading,
+        }
         for student in self.students:
             data["students"].append(student.id)
         # for assessment, templates_data in self.assignment_templates.items():

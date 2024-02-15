@@ -38,7 +38,9 @@ class School:
         return data
 
     def save(self):
-        with open(f"{globals.database_location}/{self.name}/{self.name}.json", "w") as file:
+        with open(
+            f"{globals.database_location}/{self.name}/{self.name}.json", "w"
+        ) as file:
             json.dump(self.to_dict(), file, indent=4)
 
     def get_student(self, id: str) -> Student:
@@ -60,14 +62,18 @@ class School:
         return None
 
     def get_enrolled_courses(self, student: Student) -> list[Course]:
-        return [course for course in self.courses if course.is_student_enrolled(student)]
+        return [
+            course for course in self.courses if course.is_student_enrolled(student)
+        ]
 
     def load(self) -> dict:
         data = {}
         self.students.clear()
         self.courses.clear()
         try:
-            with open(f"{globals.database_location}/{self.name}/{self.name}.json", "r") as file:
+            with open(
+                f"{globals.database_location}/{self.name}/{self.name}.json", "r"
+            ) as file:
                 data = json.load(file)
         except FileNotFoundError:
             self.save()
@@ -86,9 +92,13 @@ class School:
             for assessment, assessment_data in course_data["assessments"].items():
                 for student_id in assessment_data:
                     for assignment_data in assessment_data[student_id]:
-                        template = AssignmentTemplate(assignment_data['name'], assignment_data['worth'])
+                        template = AssignmentTemplate(
+                            assignment_data["name"], assignment_data["worth"]
+                        )
                         if course.does_template_exist(assessment, template):
-                            template = course.get_template(assessment, assignment_data['name'])
+                            template = course.get_template(
+                                assessment, assignment_data["name"]
+                            )
                         else:
                             course.add_template(assessment, template)
                         assignment = Assignment(template)

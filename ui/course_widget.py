@@ -54,8 +54,14 @@ class CourseWidget(QWidget):
         self.pushButton_add.clicked.connect(self.add_student)
         self.pushButton_remove.clicked.connect(self.remove_student)
         self.load_students()
-        self.listWidget_students.setCurrentRow(self.settings.value(f"{self.school.name} - {self.course.name} - last_selected_student", 0, type=int))
-        
+        self.listWidget_students.setCurrentRow(
+            self.settings.value(
+                f"{self.school.name} - {self.course.name} - last_selected_student",
+                0,
+                type=int,
+            )
+        )
+
         self.load_grading()
         self.treeWidget_grading.header().setSectionResizeMode(
             0, QHeaderView.ResizeMode.ResizeToContents
@@ -66,7 +72,9 @@ class CourseWidget(QWidget):
         self.treeWidget_grading.itemChanged.connect(self.grading_changed)
         self.treeWidget_grading.itemDoubleClicked.connect(self.grading_double_clicked)
         self.toolBox.currentChanged.connect(self.tool_box_change)
-        self.toolBox.setCurrentIndex(self.settings.value("last_opened_course_tab", 0, type=int))
+        self.toolBox.setCurrentIndex(
+            self.settings.value("last_opened_course_tab", 0, type=int)
+        )
 
     def tool_box_change(self):
         if (
@@ -97,8 +105,13 @@ class CourseWidget(QWidget):
             self.course.sync_assignments(new_student)
             self.school.save()
             self.load_students()
-            self.listWidget_students.setCurrentRow(self.settings.value(f"{self.school.name} - {self.course.name} - last_selected_student", 0, type=int))
-            
+            self.listWidget_students.setCurrentRow(
+                self.settings.value(
+                    f"{self.school.name} - {self.course.name} - last_selected_student",
+                    0,
+                    type=int,
+                )
+            )
 
     def remove_student(self):
         students = [student.name for student in self.course.students]
@@ -115,15 +128,24 @@ class CourseWidget(QWidget):
             self.course.remove_student(self.school.get_student_from_name(item))
             self.school.save()
             self.load_students()
-            self.listWidget_students.setCurrentRow(self.settings.value(f"{self.school.name} - {self.course.name} - last_selected_student", 0, type=int))
+            self.listWidget_students.setCurrentRow(
+                self.settings.value(
+                    f"{self.school.name} - {self.course.name} - last_selected_student",
+                    0,
+                    type=int,
+                )
+            )
 
     def student_changed(self):
-        with contextlib.suppress(KeyError): # For when a student is removed
+        with contextlib.suppress(KeyError):  # For when a student is removed
             selected_student = self.listWidget_students.currentItem().text()
             self.load_assessments(self.students[selected_student])
             self.last_selected_student = self.students[selected_student]
             self.last_selected_row = self.listWidget_students.currentRow()
-            self.settings.setValue(f"{self.school.name} - {self.course.name} - last_selected_student", self.last_selected_row)
+            self.settings.setValue(
+                f"{self.school.name} - {self.course.name} - last_selected_student",
+                self.last_selected_row,
+            )
 
     def load_students(self):
         self.listWidget_students.clear()
@@ -133,7 +155,13 @@ class CourseWidget(QWidget):
         if len(list(self.students.keys())) == 1:
             self.listWidget_students.setCurrentRow(0)
         else:
-            self.listWidget_students.setCurrentRow(self.settings.value(f"{self.school.name} - {self.course.name} - last_selected_student", 0, type=int))
+            self.listWidget_students.setCurrentRow(
+                self.settings.value(
+                    f"{self.school.name} - {self.course.name} - last_selected_student",
+                    0,
+                    type=int,
+                )
+            )
 
     def student_double_clicked(self):
         student = self.school.get_student_from_name(
@@ -190,8 +218,13 @@ class CourseWidget(QWidget):
             if self.last_selected_student is not None:
                 self.load_assessments(self.last_selected_student)
                 self.load_grading()
-            self.listWidget_students.setCurrentRow(self.settings.value(f"{self.school.name} - {self.course.name} - last_selected_student", 0, type=int))
-            
+            self.listWidget_students.setCurrentRow(
+                self.settings.value(
+                    f"{self.school.name} - {self.course.name} - last_selected_student",
+                    0,
+                    type=int,
+                )
+            )
 
     def remove_assessment(self):
         assessments = [assessment for assessment in self.course.assessments]
@@ -223,6 +256,13 @@ class CourseWidget(QWidget):
             self.assessment_tab_box.addTab(table_widget, assessment)
         self.assessment_tab_box.currentChanged.connect(self.assessment_tab_box_changed)
         self.assessment_tab_box.enable_save_tab_order()
+        self.assessment_tab_box.setCurrentIndex(
+            self.settings.value(
+                f"{self.school.name} - {self.course.name} - last_selected_assessment",
+                0,
+                type=int,
+            )
+        )
 
         with contextlib.suppress(AttributeError, ValueError):
             self.assessment_tab_box.setCurrentIndex(
@@ -235,6 +275,10 @@ class CourseWidget(QWidget):
     def assessment_tab_box_changed(self):
         self.last_selected_assessment = self.assessment_tab_box.tabText(
             self.assessment_tab_box.currentIndex()
+        )
+        self.settings.setValue(
+            f"{self.school.name} - {self.course.name} - last_selected_assessment",
+            self.assessment_tab_box.currentIndex(),
         )
 
     def load_summary(self):

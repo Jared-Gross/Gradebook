@@ -76,9 +76,9 @@ class AssessmentTableWidget(QTableWidget):
                         self.course.sync_assignments(student)
                     self.load_coursework()
             else:
-                self.table[self.last_selected_assignment].assignment.template.name = self.item(
-                    changed_row, 0
-                ).text()
+                self.table[
+                    self.last_selected_assignment
+                ].assignment.template.name = self.item(changed_row, 0).text()
             self.school.save()
         except KeyError:
             assignment_name = self.item(changed_row, 0).text()
@@ -176,7 +176,5 @@ class AssessmentTableWidget(QTableWidget):
 
         self.context_menu.addMenu(quick_add_menu)
 
-        self.setContextMenuPolicy(
-            Qt.ContextMenuPolicy.CustomContextMenu
-        )
+        self.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)

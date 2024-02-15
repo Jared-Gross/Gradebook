@@ -31,7 +31,7 @@ class CoursesTabWidget(QTabWidget):
         course_name = self.current_tab()
         try:
             course_widget = CourseWidget(self.courses[course_name], self.school, self)
-        except KeyError: # No courses have been added yet
+        except KeyError:  # No courses have been added yet
             return
         self.blockSignals(True)
         self.insertTab(self.currentIndex(), course_widget, course_name)
