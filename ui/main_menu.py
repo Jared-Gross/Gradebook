@@ -41,9 +41,10 @@ class MainMenu(QMainWindow):
         self.setWindowIcon(QIcon(Icons.app_icon))
         self.school = School(self.settings.value("last_opened_school", os.listdir('database')[0], type=str))
         self.school.load()
-        with contextlib.suppress(IndexError):
-            # self.settings.setValue("last_selected_course", self.school.courses[0].name)
-            self.last_selected_course: str = self.settings.value("last_selected_course", self.school.courses[0].name, type=str)
+        try:
+            self.last_selected_course: str = self.settings.value(f"{self.school.name} - last_selected_course", self.school.courses[0].name, type=str)
+        except IndexError:
+            self.last_selected_course: str = ""
         self.tabWidget: QTabWidget
         self.tabWidget.setCurrentIndex(self.settings.value("last_opened_tab", 0, type=int))
         self.listWidget_students: QListWidget
@@ -86,7 +87,7 @@ class MainMenu(QMainWindow):
             tab_order.index(self.listWidget_courses.currentItem().text())
         )
         self.last_selected_course = self.courses_widget.current_tab()
-        self.settings.setValue("last_selected_course", self.last_selected_course)
+        self.settings.setValue(f"{self.school.name} - last_selected_course", self.last_selected_course)
 
     def rename_tab(self):
         old_name = self.listWidget_courses.currentItem().text()
@@ -100,7 +101,7 @@ class MainMenu(QMainWindow):
                     self.school.save()
                     break
             self.last_selected_course = text
-            self.settings.setValue("last_selected_course", self.last_selected_course)
+            self.settings.setValue(f"{self.school.name} - last_selected_course", self.last_selected_course)
             self.load_courses()
 
     def save_courses_tab_order(self):
@@ -224,14 +225,14 @@ class MainMenu(QMainWindow):
         self.courses_widget.enable()
         try:
             self.courses_widget.setCurrentIndex(
-                tab_order.index(self.settings.value("last_selected_course", "", type=str))
+                tab_order.index(self.settings.value(f"{self.school.name} - last_selected_course", "", type=str))
             )
             self.listWidget_courses.setCurrentRow(
-                tab_order.index(self.settings.value("last_selected_course", "", type=str))
+                tab_order.index(self.settings.value(f"{self.school.name} - last_selected_course", "", type=str))
             )
         except (AttributeError, ValueError):
-            self.courses_widget.setCurrentIndex(tab_order.index(self.last_selected_course))
-            self.listWidget_courses.setCurrentRow(tab_order.index(self.last_selected_course))
+            self.courses_widget.setCurrentIndex(0)
+            self.listWidget_courses.setCurrentRow(0)
         self.courses_widget.load_tab()
 
     def add_school(self):

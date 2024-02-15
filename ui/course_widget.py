@@ -54,7 +54,7 @@ class CourseWidget(QWidget):
         self.pushButton_add.clicked.connect(self.add_student)
         self.pushButton_remove.clicked.connect(self.remove_student)
         self.load_students()
-        self.listWidget_students.setCurrentRow(self.settings.value("last_selected_student", 0, type=int))
+        self.listWidget_students.setCurrentRow(self.settings.value(f"{self.school.name} - {self.course.name} - last_selected_student", 0, type=int))
         
         self.load_grading()
         self.treeWidget_grading.header().setSectionResizeMode(
@@ -97,7 +97,7 @@ class CourseWidget(QWidget):
             self.course.sync_assignments(new_student)
             self.school.save()
             self.load_students()
-            self.listWidget_students.setCurrentRow(self.settings.value("last_selected_student", 0, type=int))
+            self.listWidget_students.setCurrentRow(self.settings.value(f"{self.school.name} - {self.course.name} - last_selected_student", 0, type=int))
             
 
     def remove_student(self):
@@ -115,7 +115,7 @@ class CourseWidget(QWidget):
             self.course.remove_student(self.school.get_student_from_name(item))
             self.school.save()
             self.load_students()
-            self.listWidget_students.setCurrentRow(self.settings.value("last_selected_student", 0, type=int))
+            self.listWidget_students.setCurrentRow(self.settings.value(f"{self.school.name} - {self.course.name} - last_selected_student", 0, type=int))
 
     def student_changed(self):
         with contextlib.suppress(KeyError): # For when a student is removed
@@ -123,7 +123,7 @@ class CourseWidget(QWidget):
             self.load_assessments(self.students[selected_student])
             self.last_selected_student = self.students[selected_student]
             self.last_selected_row = self.listWidget_students.currentRow()
-            self.settings.setValue("last_selected_student", self.last_selected_row)
+            self.settings.setValue(f"{self.school.name} - {self.course.name} - last_selected_student", self.last_selected_row)
 
     def load_students(self):
         self.listWidget_students.clear()
@@ -133,7 +133,7 @@ class CourseWidget(QWidget):
         if len(list(self.students.keys())) == 1:
             self.listWidget_students.setCurrentRow(0)
         else:
-            self.listWidget_students.setCurrentRow(self.settings.value("last_selected_student", 0, type=int))
+            self.listWidget_students.setCurrentRow(self.settings.value(f"{self.school.name} - {self.course.name} - last_selected_student", 0, type=int))
 
     def student_double_clicked(self):
         student = self.school.get_student_from_name(
@@ -190,7 +190,7 @@ class CourseWidget(QWidget):
             if self.last_selected_student is not None:
                 self.load_assessments(self.last_selected_student)
                 self.load_grading()
-            self.listWidget_students.setCurrentRow(self.settings.value("last_selected_student", 0, type=int))
+            self.listWidget_students.setCurrentRow(self.settings.value(f"{self.school.name} - {self.course.name} - last_selected_student", 0, type=int))
             
 
     def remove_assessment(self):
