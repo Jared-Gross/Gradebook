@@ -1,5 +1,5 @@
-import os
 import copy
+import os
 
 from utils import globals
 from utils.assignment import Assignment

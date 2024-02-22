@@ -12,10 +12,10 @@ from ui.student_summary_widget import StudentSummaryWidget
 from utils import globals
 from utils.assignment import Assignment
 from utils.course import Course
+from utils.generate_student_report import StudentReport
 from utils.icons import Icons
 from utils.school import School
 from utils.student import Student
-from utils.generate_student_report import StudentReport
 
 
 class StudentDialog(QDialog):

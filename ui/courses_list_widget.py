@@ -1,7 +1,5 @@
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtWidgets import (
-    QListWidget,
-)
+from PyQt6.QtWidgets import QListWidget
 
 from ui.course_widget import CourseWidget
 from utils import globals

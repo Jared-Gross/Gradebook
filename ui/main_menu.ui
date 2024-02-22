@@ -48,7 +48,7 @@
                <x>0</x>
                <y>0</y>
                <width>1104</width>
-               <height>681</height>
+               <height>683</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0">
@@ -145,7 +145,7 @@
              <x>0</x>
              <y>0</y>
              <width>1195</width>
-             <height>683</height>
+             <height>685</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -183,7 +183,7 @@
      <x>0</x>
      <y>0</y>
      <width>1414</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuCourses">
@@ -215,9 +215,15 @@
     <addaction name="separator"/>
     <addaction name="menuLoad_School"/>
    </widget>
+   <widget class="QMenu" name="menuTheme">
+    <property name="title">
+     <string>Theme</string>
+    </property>
+   </widget>
    <addaction name="menuSchools"/>
    <addaction name="menuCourses"/>
    <addaction name="menuStudents"/>
+   <addaction name="menuTheme"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionAdd_Course">

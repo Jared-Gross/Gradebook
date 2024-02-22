@@ -1,4 +1,5 @@
 import contextlib
+from functools import partial
 
 import ujson as json
 from PyQt6 import uic
@@ -7,13 +8,13 @@ from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import (
     QAbstractScrollArea,
     QHeaderView,
+    QInputDialog,
     QMenu,
     QTableWidget,
     QTableWidgetItem,
     QTabWidget,
     QToolBox,
     QWidget,
-    QInputDialog,
 )
 
 from ui.grade_slider import GradeSlider
@@ -24,8 +25,6 @@ from utils.assignment_template import AssignmentTemplate
 from utils.course import Course
 from utils.school import School
 from utils.student import Student
-
-from functools import partial
 
 
 class AssessmentTableWidget(QTableWidget):
@@ -41,6 +40,7 @@ class AssessmentTableWidget(QTableWidget):
         self.school = school
         self.course = course
         self.student = student
+        self.parent = parent
         self.assessment: str = assessment
         self.cellChanged.connect(self.cell_changed)
         self.cellDoubleClicked.connect(self.cell_double_clicked)
@@ -106,13 +106,18 @@ class AssessmentTableWidget(QTableWidget):
         self.setHorizontalHeaderLabels(["Name", "Grade"])
         self.setRowCount(50)
         self.horizontalHeader().setStretchLastSection(True)
-        for row, coursework in enumerate(
-            self.course.assessments[self.assessment][self.student]
-        ):
-            self.setItem(row, 0, QTableWidgetItem(coursework.template.name))
-            grade_slider = GradeSlider(self.school, coursework, self)
-            self.table[coursework.template.name] = grade_slider
-            self.setCellWidget(row, 1, grade_slider)
+        try:
+            for row, coursework in enumerate(
+                self.course.assessments[self.assessment][self.student]
+            ):
+                self.setItem(row, 0, QTableWidgetItem(coursework.template.name))
+                grade_slider = GradeSlider(self.school, coursework, self)
+                self.table[coursework.template.name] = grade_slider
+                self.setCellWidget(row, 1, grade_slider)
+        except KeyError: # Student was just removed
+            self.parent.parent.last_selected_student = None
+            self.parent.parent.load_assessments(None)
+            return
         self.resizeColumnsToContents()
         header = self.horizontalHeader()
         header.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)

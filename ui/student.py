@@ -7,10 +7,10 @@ from PyQt6.QtWidgets import QMenu, QWidget
 from ui.student_dialog import StudentDialog
 from utils import globals
 from utils.assignment import Assignment
+from utils.colors import darken_color, lighten_color
 from utils.course import Course
 from utils.school import School
 from utils.student import Student
-from utils.colors import darken_color, lighten_color
 
 
 class StudentWidget(QWidget):

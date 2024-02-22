@@ -14,9 +14,9 @@ from PyQt6.QtWidgets import (
 from utils import globals
 from utils.assignment import Assignment
 from utils.course import Course
+from utils.letter_grade import get_letter_grade
 from utils.school import School
 from utils.student import Student
-from utils.letter_grade import get_letter_grade
 
 
 class StudentSummaryWidget(QTreeWidget):

@@ -1,6 +1,5 @@
-from utils.letter_grade import get_letter_grade
-
 from utils.assignment_template import AssignmentTemplate
+from utils.letter_grade import get_letter_grade
 
 
 class Assignment:

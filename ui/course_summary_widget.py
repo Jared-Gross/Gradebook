@@ -1,11 +1,13 @@
+import contextlib
 import math
 import random
 from statistics import linear_regression
 
 import numpy as np
 import pyqtgraph as pg
+import qt_material
 from natsort import natsorted
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import QSettings, Qt
 from PyQt6.QtGui import QAction, QColor
 from PyQt6.QtWidgets import (
     QAbstractScrollArea,
@@ -36,16 +38,14 @@ class CourseSummaryWidget(QWidget):
         super(CourseSummaryWidget, self).__init__(parent)
         self.layout = QVBoxLayout(self)
         self.course = course
-        self.win: GraphicsLayout = pg.GraphicsLayoutWidget()
-        self.win.setWindowTitle("Assessments")
-        self.win.ci.setBorder((29, 233, 182))
-        self.win.setBackground((38, 42, 46))
+        self.parent = parent
+        self.settings = QSettings("TheCodingJ's", "Gradiance", self)
+
         pg.setConfigOptions(antialias=True)
 
         self.data = {}
         self.load_data()
         self.load_graphs()
-        self.layout.addWidget(self.win)
         self.setLayout(self.layout)
 
     def load_data(self):
@@ -70,6 +70,17 @@ class CourseSummaryWidget(QWidget):
         return list(assignemnts)
 
     def load_graphs(self):
+        self.clear_layout(self.layout)
+        self.theme = qt_material.get_theme(
+            self.settings.value(f"{self.parent.school.name} - theme", "dark_teal.xml")
+        )
+        primary_color = self.theme["primaryColor"]
+        secondary_color = self.theme["secondaryColor"]
+        self.win: GraphicsLayout = pg.GraphicsLayoutWidget()
+        self.win.setWindowTitle("Assessments")
+        self.win.ci.setBorder(primary_color)
+        self.win.setBackground(secondary_color)
+        self.layout.addWidget(self.win)
         max_x_range = 0
         max_y_range = 0
         for assessment in self.data:
@@ -81,7 +92,17 @@ class CourseSummaryWidget(QWidget):
             plot.addLegend()
             plot.showGrid(x=True, y=True)
             plot.setLabel("left", text="Percentage (%)")
-
+            pass_line = InfiniteLine(
+                angle=0,
+                pen="w",
+                label="Passed",
+                labelOpts={
+                    "fill": (100, 200, 100, 50),
+                },
+            )
+            pass_line.setPen((100, 200, 100))
+            pass_line.setValue((0, 50))
+            plot.addItem(pass_line)
             for student in self.data[assessment]:
                 x_values = self.data[assessment][student]["x"]
                 y_values = self.data[assessment][student]["y"]
@@ -123,3 +144,14 @@ class CourseSummaryWidget(QWidget):
             axis_bottom.setTicks(
                 [[(i, str(name[0])) for i, name in enumerate(x_dict.items())]]
             )  # Adjust the range and step as needed
+
+    def clear_layout(self, layout):
+        with contextlib.suppress(AttributeError):
+            if layout is not None:
+                while layout.count():
+                    item = layout.takeAt(0)
+                    widget = item.widget()
+                    if widget is not None:
+                        widget.deleteLater()
+                    else:
+                        self.clear_layout(item.layout())

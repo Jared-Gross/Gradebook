@@ -1,9 +1,10 @@
-import ujson as json
 import os
 
+import ujson as json
+
 from utils import globals
-from utils.assignment_template import AssignmentTemplate
 from utils.assignment import Assignment
+from utils.assignment_template import AssignmentTemplate
 from utils.course import Course
 from utils.student import Student
 

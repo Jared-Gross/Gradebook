@@ -1,16 +1,17 @@
 import sys
+
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import (
     QApplication,
-    QWidget,
-    QVBoxLayout,
     QHBoxLayout,
+    QMenu,
     QPushButton,
     QSizePolicy,
     QTabWidget,
-    QMenu,
+    QVBoxLayout,
+    QWidget,
 )
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QAction
 
 
 class MultiRowTabWidget(QWidget):

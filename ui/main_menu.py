@@ -2,29 +2,31 @@ import contextlib
 import os
 from functools import partial
 
+import qt_material
 import ujson as json
 from PyQt6 import uic
-from PyQt6.QtCore import Qt, QSettings
-from PyQt6.QtGui import QIcon, QAction
+from PyQt6.QtCore import QSettings, Qt
+from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtWidgets import (
+    QApplication,
     QDialog,
     QGroupBox,
     QHBoxLayout,
     QInputDialog,
+    QListWidget,
     QMainWindow,
+    QMenu,
     QScrollArea,
     QTabWidget,
     QVBoxLayout,
     QWidget,
-    QListWidget,
-    QMenu,
 )
 
 from ui.add_student import AddStudent
+from ui.courses_list_widget import CoursesListWidget
 from ui.courses_tab_widget import CoursesTabWidget
 from ui.student import StudentWidget
 from ui.student_dialog import StudentDialog
-from ui.courses_list_widget import CoursesListWidget
 from utils import globals
 from utils.assignment import Assignment
 from utils.course import Course
@@ -34,17 +36,22 @@ from utils.student import Student
 
 
 class MainMenu(QMainWindow):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, app: QApplication):
+        super(QMainWindow, self).__init__()
         uic.loadUi("ui/main_menu.ui", self)
+        self.app = app
         self.settings = QSettings("TheCodingJ's", "Gradiance", self)
         self.setWindowIcon(QIcon(Icons.app_icon))
-        self.school = School(
-            self.settings.value(
-                "last_opened_school", os.listdir("database")[0], type=str
+        try:
+            self.school = School(
+                self.settings.value(
+                    "last_opened_school", os.listdir("database")[0], type=str
+                )
             )
-        )
-        self.school.load()
+            self.school.load()
+        except IndexError:  # No database has been made
+            with contextlib.suppress(AttributeError):
+                self.add_school()
         try:
             self.last_selected_course: str = self.settings.value(
                 f"{self.school.name} - last_selected_course",
@@ -65,6 +72,10 @@ class MainMenu(QMainWindow):
         self.load_students()
         self.load_courses()
         self.showMaximized()
+        self.load_themes_menu()
+        self.change_theme(
+            self.settings.value(f"{self.school.name} - theme", "dark_teal.xml")
+        )
 
     def load_clicked_events(self):
         self.tabWidget.tabBarClicked.connect(self.main_tab_clicked)
@@ -83,6 +94,37 @@ class MainMenu(QMainWindow):
         self.actionDelete_Student.triggered.connect(self.delete_student)
         self.actionAdd_New_School.triggered.connect(self.add_school)
         self.actionRemove_School.triggered.connect(self.delete_school)
+
+    def load_themes_menu(self):
+        self.menuTheme.clear()
+        for theme in qt_material.list_themes():
+            action = QAction(theme, self)
+            action.setCheckable(True)
+            action.setChecked(False)
+            if (
+                self.settings.value(f"{self.school.name} - theme", "dark_teal.xml")
+                == theme
+            ):
+                action.setChecked(True)
+            action.triggered.connect(partial(self.change_theme, theme))
+            self.menuTheme.addAction(action)
+
+    def change_theme(self, theme: str):
+        QApplication.setOverrideCursor(Qt.CursorShape.WaitCursor)
+        self.settings.setValue(f"{self.school.name} - theme", theme)
+        qt_material.apply_stylesheet(self.app, theme)
+        if "dark" in theme:
+            self.setStyleSheet(
+                "QLineEdit, QComboBox, QDateEdit, QSpinBox, QDoubleSpinBox{color: #eeeeee;}"
+            )
+        else:
+            self.setStyleSheet(
+                "QLineEdit, QComboBox, QDateEdit, QSpinBox, QDoubleSpinBox{color: #333333;}"
+            )
+        self.load_themes_menu()
+        with contextlib.suppress(AttributeError):  # It is not init'd yet
+            self.courses_widget.course_widget.course_summary.load_graphs()
+        QApplication.restoreOverrideCursor()
 
     def open_student_dialog(self):
         student = self.school.get_student_from_name(
@@ -217,10 +259,11 @@ class MainMenu(QMainWindow):
 
     def delete_course(self):
         courses = [course.name for course in self.school.courses]
-
+        current_item = 0 if self.last_selected_course is None else courses.index(self.last_selected_course)
         item, ok_pressed = QInputDialog.getItem(
-            None, "Select course", "Choose a course to delete:", courses, editable=False
+            None, "Select course", "Choose a course to delete:", courses, current_item, editable=False
         )
+
         if ok_pressed and item:
             selected_course = self.school.get_course(item)
             self.school.remove_course(selected_course)
@@ -258,22 +301,26 @@ class MainMenu(QMainWindow):
         self.courses_widget.load_tab()
 
     def add_school(self):
-        self.school.save()
+        with contextlib.suppress(AttributeError):  # No school exists yet
+            self.school.save()
         text, ok_pressed = QInputDialog.getText(
             self, "Input Dialog", "Enter school name:"
         )
         if ok_pressed and text:
             self.school = School(text)
             self.school.load()
+            self.settings.setValue(f"{self.school.name} - theme", "dark_teal.xml")
+            self.load_themes_menu()
             self.load_schools()
             self.load_courses()
 
     def delete_school(self):
         self.school.save()
         schools = os.listdir("database")
+        current_item = schools.index(self.school.name)
 
         item, ok_pressed = QInputDialog.getItem(
-            None, "Select course", "Choose a course to delete:", schools, editable=False
+            None, "Select course", "Choose a course to delete:", schools, current_item, editable=False
         )
         if ok_pressed and item:
             schools.remove(item)
@@ -288,6 +335,10 @@ class MainMenu(QMainWindow):
         self.school.save()
         self.school = School(school_name)
         self.school.load()
+        self.change_theme(
+            self.settings.value(f"{self.school.name} - theme", "dark_teal.xml")
+        )
+        self.load_themes_menu()
         self.load_students()
         self.load_courses()
 

@@ -4,11 +4,11 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPainter
 from PyQt6.QtWidgets import (
     QInputDialog,
-    QTabWidget,
-    QWidget,
-    QTabBar,
     QStyle,
     QStyleOptionTab,
+    QTabBar,
+    QTabWidget,
+    QWidget,
 )
 
 from ui.course_widget import CourseWidget
@@ -30,11 +30,13 @@ class CoursesTabWidget(QTabWidget):
     def load_tab(self):
         course_name = self.current_tab()
         try:
-            course_widget = CourseWidget(self.courses[course_name], self.school, self)
+            self.course_widget = CourseWidget(
+                self.courses[course_name], self.school, self
+            )
         except KeyError:  # No courses have been added yet
             return
         self.blockSignals(True)
-        self.insertTab(self.currentIndex(), course_widget, course_name)
+        self.insertTab(self.currentIndex(), self.course_widget, course_name)
         # NOTE With out this if statement you cannot select the last tab
         if self.currentIndex() == self.count() - 1:
             self.removeTab(self.currentIndex())

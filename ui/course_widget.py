@@ -3,8 +3,9 @@ import copy
 
 import ujson as json
 from PyQt6 import uic
-from PyQt6.QtCore import Qt, QSettings
+from PyQt6.QtCore import QSettings, Qt
 from PyQt6.QtWidgets import (
+    QLabel,
     QDoubleSpinBox,
     QGroupBox,
     QHeaderView,
@@ -115,11 +116,13 @@ class CourseWidget(QWidget):
 
     def remove_student(self):
         students = [student.name for student in self.course.students]
+
         item, ok_pressed = QInputDialog.getItem(
             None,
             "Select student",
             "Choose a student to remove:",
             students,
+            self.last_selected_row,
             editable=False,
         )
 
@@ -162,6 +165,7 @@ class CourseWidget(QWidget):
                     type=int,
                 )
             )
+        self.load_assessments(self.last_selected_student)
 
     def student_double_clicked(self):
         student = self.school.get_student_from_name(
@@ -215,9 +219,8 @@ class CourseWidget(QWidget):
         if ok_pressed and text:
             self.course.add_assessment(text)
             self.school.save()
-            if self.last_selected_student is not None:
-                self.load_assessments(self.last_selected_student)
-                self.load_grading()
+            self.load_assessments(self.last_selected_student)
+            self.load_grading()
             self.listWidget_students.setCurrentRow(
                 self.settings.value(
                     f"{self.school.name} - {self.course.name} - last_selected_student",
@@ -228,12 +231,13 @@ class CourseWidget(QWidget):
 
     def remove_assessment(self):
         assessments = [assessment for assessment in self.course.assessments]
-
+        current_item = 0 if self.last_selected_assessment is None else assessments.index(self.last_selected_assessment)
         item, ok_pressed = QInputDialog.getItem(
             None,
             "Select assessment",
             "Choose an assessment to remove:",
             assessments,
+            current_item,
             editable=False,
         )
 
@@ -244,6 +248,19 @@ class CourseWidget(QWidget):
             self.load_grading()
 
     def load_assessments(self, student: Student = None):
+        self.pushButton_add_assessment.setEnabled(True)
+        self.pushButton_remove_assessment.setEnabled(True)
+        if self.last_selected_student == None:
+            self.assessment_tab_box = None
+            self.clear_layout(self.horizontalLayout_3)
+            self.horizontalLayout_3.addWidget(QLabel("You need to add a student", self))
+            self.pushButton_add_assessment.setEnabled(False)
+            self.pushButton_remove_assessment.setEnabled(False)
+            return
+        if len(self.course.assessments) == 0:
+            self.clear_layout(self.horizontalLayout_3)
+            self.horizontalLayout_3.addWidget(QLabel("You need to add an assessment", self))
+            return
         if student == None:
             student = self.last_selected_student
         self.clear_layout(self.horizontalLayout_3)
@@ -251,9 +268,12 @@ class CourseWidget(QWidget):
         self.assessment_tab_box = AssessmentTabWidget(self.school, self.course, self)
         for assessment in self.course.assessments:
             table_widget = AssessmentTableWidget(
-                self.school, self.course, student, assessment, self
+                self.school, self.course, student, assessment, self.assessment_tab_box
             )
-            self.assessment_tab_box.addTab(table_widget, assessment)
+            try:
+                self.assessment_tab_box.addTab(table_widget, assessment)
+            except AttributeError:
+                return
         self.assessment_tab_box.currentChanged.connect(self.assessment_tab_box_changed)
         self.assessment_tab_box.enable_save_tab_order()
         self.assessment_tab_box.setCurrentIndex(
@@ -283,8 +303,8 @@ class CourseWidget(QWidget):
 
     def load_summary(self):
         self.clear_layout(self.verticalLayout_summary)
-        summary = CourseSummaryWidget(self.course, self)
-        self.verticalLayout_summary.addWidget(summary)
+        self.course_summary = CourseSummaryWidget(self.course, self)
+        self.verticalLayout_summary.addWidget(self.course_summary)
 
     def clear_layout(self, layout):
         with contextlib.suppress(AttributeError):

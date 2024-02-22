@@ -1,23 +1,15 @@
 import contextlib
 
-import ujson as json
 from PyQt6 import uic
-from PyQt6.QtCore import Qt, QRegularExpression
-from PyQt6.QtWidgets import (
-    QTableWidget,
-    QTableWidgetItem,
-    QTabWidget,
-    QToolBox,
-    QWidget,
-)
-from PyQt6.QtGui import QRegularExpressionValidator
-from ui.student import StudentWidget
+from PyQt6.QtCore import QRegularExpression, Qt
+from PyQt6.QtGui import QRegularExpressionValidator, QResizeEvent
+from PyQt6.QtWidgets import QLabel, QWidget
+
+from ui.grade_letters import GradeLetters
 from utils import globals
 from utils.assignment import Assignment
-from utils.course import Course
-from utils.school import School
-from utils.student import Student
 from utils.letter_grade import get_letter_grade
+from utils.school import School
 
 
 class GradeSlider(QWidget):
@@ -45,12 +37,19 @@ class GradeSlider(QWidget):
         self.doubleSpinBox_percentage.valueChanged.connect(self.percentage_change)
         self.horizontalSlider.valueChanged.connect(self.slider_changed)
         self.lineEdit_input.editingFinished.connect(self.input_grade_changed)
+        self.widget_letters: QWidget
+        grade_letters = GradeLetters(self)
+        self.horizontalLayout_2.addWidget(grade_letters)
         self.update_letter_grade()
 
     def percentage_change(self):
         with contextlib.suppress(TypeError):
             self.horizontalSlider.disconnect()
         self.horizontalSlider.setValue(int(self.get_percentage()))
+        self.assignment.score = int(self.get_percentage())
+        self.lineEdit_input.setText(
+            f"{int(self.get_percentage())}/{self.assignment.template.worth}"
+        )
         self.horizontalSlider.valueChanged.connect(self.slider_changed)
         self.update_letter_grade()
 
