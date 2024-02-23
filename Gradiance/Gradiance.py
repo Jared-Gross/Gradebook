@@ -161,8 +161,11 @@ def result():
 
 
 app = rx.App(
-theme=rx.theme(
-        has_background=True, radius="none", accent_color="orange", appearance="light",
+    theme=rx.theme(
+        has_background=True,
+        radius="none",
+        accent_color="orange",
+        appearance="light",
     ),
 )
 app.add_page(index, title="Reflex Quiz", on_load=State.onload)

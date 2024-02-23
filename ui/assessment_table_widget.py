@@ -114,7 +114,7 @@ class AssessmentTableWidget(QTableWidget):
                 grade_slider = GradeSlider(self.school, coursework, self)
                 self.table[coursework.template.name] = grade_slider
                 self.setCellWidget(row, 1, grade_slider)
-        except KeyError: # Student was just removed
+        except KeyError:  # Student was just removed
             self.parent.parent.last_selected_student = None
             self.parent.parent.load_assessments(None)
             return

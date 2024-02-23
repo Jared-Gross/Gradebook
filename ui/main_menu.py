@@ -5,7 +5,7 @@ from functools import partial
 import qt_material
 import ujson as json
 from PyQt6 import uic
-from PyQt6.QtCore import QSettings, Qt
+from PyQt6.QtCore import QSettings, Qt, QFile, QTextStream
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtWidgets import (
     QApplication,
@@ -20,8 +20,10 @@ from PyQt6.QtWidgets import (
     QTabWidget,
     QVBoxLayout,
     QWidget,
+    QMessageBox,
 )
 
+from ui.about_dialog import AboutDialog
 from ui.add_student import AddStudent
 from ui.courses_list_widget import CoursesListWidget
 from ui.courses_tab_widget import CoursesTabWidget
@@ -94,6 +96,8 @@ class MainMenu(QMainWindow):
         self.actionDelete_Student.triggered.connect(self.delete_student)
         self.actionAdd_New_School.triggered.connect(self.add_school)
         self.actionRemove_School.triggered.connect(self.delete_school)
+        self.actionAbout.triggered.connect(self.show_about)
+        self.actionAbout_Qt.triggered.connect(QApplication.aboutQt)
 
     def load_themes_menu(self):
         self.menuTheme.clear()
@@ -259,9 +263,18 @@ class MainMenu(QMainWindow):
 
     def delete_course(self):
         courses = [course.name for course in self.school.courses]
-        current_item = 0 if self.last_selected_course is None else courses.index(self.last_selected_course)
+        current_item = (
+            0
+            if self.last_selected_course is None
+            else courses.index(self.last_selected_course)
+        )
         item, ok_pressed = QInputDialog.getItem(
-            None, "Select course", "Choose a course to delete:", courses, current_item, editable=False
+            None,
+            "Select course",
+            "Choose a course to delete:",
+            courses,
+            current_item,
+            editable=False,
         )
 
         if ok_pressed and item:
@@ -320,7 +333,12 @@ class MainMenu(QMainWindow):
         current_item = schools.index(self.school.name)
 
         item, ok_pressed = QInputDialog.getItem(
-            None, "Select course", "Choose a course to delete:", schools, current_item, editable=False
+            None,
+            "Select course",
+            "Choose a course to delete:",
+            schools,
+            current_item,
+            editable=False,
         )
         if ok_pressed and item:
             schools.remove(item)
@@ -356,6 +374,20 @@ class MainMenu(QMainWindow):
             self.load_students()
         elif current_tab == "courses":
             self.load_courses()
+
+    def show_about(self):
+        about_dialog = AboutDialog(self)
+        about_dialog.show()
+
+    def show_file_contents(self, filename):
+        file = QFile(filename)
+        if file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text):
+            stream = QTextStream(file)
+            contents = stream.readAll()
+            QMessageBox.information(self, "File Contents", contents)
+            file.close()
+        else:
+            QMessageBox.warning(self, "Error", f"Failed to open {filename}")
 
     def clear_layout(self, layout):
         with contextlib.suppress(AttributeError):

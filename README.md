@@ -30,51 +30,53 @@
     <img src="https://forthebadge.com/images/badges/works-on-my-machine.svg">
 </a>
 
-# Gradiance
+<h1>Gradiance</h1>
 
-A gradebook for teachers.
+<p>A gradebook for teachers.</p>
 
-## About Gradiance
+<h2>About Gradiance</h2>
 
-Gradiance is an open-source gradebook software designed to simplify the process of managing grades and generating reports for educators. Started as a personal project, Gradiance aims to provide a user-friendly interface for teachers to efficiently track student progress and performance.
+<p>Gradiance is an open-source gradebook software designed to simplify the process of managing grades and generating reports for educators. Started as a personal project, Gradiance aims to provide a user-friendly interface for teachers to efficiently track student progress and performance.
 
-## Features
-**Grade Management:** Easily input and manage grades for individual students or entire classes.
+<h2>Features</h2>
+<p><b>Grade Management:</b> Easily input and manage grades for individual students or entire classes.</p>
 
-**Report Generation:** Generate comprehensive student report cards that are designed with html, css, and javascript.
+<p><b>Report Generation:</b> Generate comprehensive student report cards that are designed with html, css, and javascript.</p>
 
-**Integration with Educational Games:** In the future, Gradiance aims to integrate with educational games hosted on a server, allowing students to engage in interactive learning experiences tied to their Gradiance accounts. These games cover various subjects such as math, English, spelling, and quizzes.
+<p><b>Integration with Educational Games:</b> In the future, Gradiance aims to integrate with educational games hosted on a server, allowing students to engage in interactive learning experiences tied to their Gradiance accounts. These games cover various subjects such as math, English, spelling, and quizzes.</p>
 
-**Graphical Representation:** Gradiance offers graphical representations of student assessments, enabling educators to visualize data and derive meaningful insights.
+<p><b>Graphical Representation:</b> Gradiance offers graphical representations of student assessments, enabling educators to visualize data and derive meaningful insights.</p>
 
-**Statistical Analysis Tools:** In addition to graphs, Gradiance plans to incorporate more statistical analysis tools in the future, empowering educators to conduct in-depth analysis of student performance trends and patterns.
+<p><b>Statistical Analysis Tools:</b> In addition to graphs, Gradiance plans to incorporate more statistical analysis tools in the future, empowering educators to conduct in-depth analysis of student performance trends and patterns.</p>
 
-## Future Development
+<h2>Future Development</h2>
 
-The vision for Gradiance extends beyond traditional gradebook functionalities. We aim to create a holistic educational ecosystem where teachers can seamlessly integrate interactive learning experiences into their curriculum that expresses each teachers unique teaching style. By combining grade management with educational games, we strive to enhance student engagement and foster a dynamic learning environment.
+<p>The vision for Gradiance extends beyond traditional gradebook functionalities. We aim to create a holistic educational ecosystem where teachers can seamlessly integrate interactive learning experiences into their curriculum that expresses each teachers unique teaching style. By combining grade management with educational games, we strive to enhance student engagement and foster a dynamic learning environment.</p>
 
-## Get Involved
+<h2>Get Involved</h2>
 
-Gradiance is an open-source project, and we welcome contributions from the community. Whether you're a developer, educator, or student passionate about improving educational tools, there are various ways to get involved:
+<p>Gradiance is an open-source project, and we welcome contributions from the community. Whether you're a developer, educator, or student passionate about improving educational tools, there are various ways to get involved:</p>
 
-**Contribute Ideas:** Whether you're an educator with insights into classroom needs, a developer with innovative feature suggestions, or a student with ideas for engaging educational content, we want to hear from you and improve Gradiance!
+<p><b>Contribute Ideas:</b> Whether you're an educator with insights into classroom needs, a developer with innovative feature suggestions, or a student with ideas for engaging educational content, we want to hear from you and improve Gradiance!</p>
 
-**Educational Content Suggestions:** Are you passionate about educational games or interactive learning experiences? Propose ideas for new games, quizzes, or learning modules that could be integrated with Gradiance to enrich the educational experience for students.
+<p><b>Educational Content Suggestions:</b> Are you passionate about educational games or interactive learning experiences? Propose ideas for new games, quizzes, or learning modules that could be integrated with Gradiance to enrich the educational experience for students.</p>
 
-**Contribute Code:** Help us improve Gradiance by contributing code, fixing bugs, or implementing new features.
+<p><b>Contribute Code:</b> Help us improve Gradiance by contributing code, fixing bugs, or implementing new features.</p>
 
-**Testing and Feedback:** Provide feedback on existing features and help us identify areas for improvement.
+<p><b>Testing and Feedback:</b> Provide feedback on existing features and help us identify areas for improvement.</p>
 
-**Spread the Word:** Share Gradiance with your colleagues and fellow educators to help us grow our community.
+<p><b>Spread the Word:</b> Share Gradiance with your colleagues and fellow educators to help us grow our community.</p>
 
-Join us in shaping the future of educational technology with Gradiance!
+<p>Join us in shaping the future of educational technology with Gradiance!</p>
 
-## Demo:
-![image](demo_images/image8.png)
-![image](demo_images/image1.png)
-![image](demo_images/image2.png)
-![image](demo_images/image3.png)
-![image](demo_images/image4.png)
-![image](demo_images/image5.png)
-![image](demo_images/image6.png)
-![image](demo_images/image7.png)
+<h2>Demo</h2>
+<p align="center">
+    <img width="600" src="demo_images/image8.png" />
+    <img width="600" src="demo_images/image1.png" />
+    <img width="600" src="demo_images/image2.png" />
+    <img width="600" src="demo_images/image3.png" />
+    <img width="600" src="demo_images/image4.png" />
+    <img width="600" src="demo_images/image5.png" />
+    <img width="600" src="demo_images/image6.png" />
+    <img width="600" src="demo_images/image7.png" />
+</p>

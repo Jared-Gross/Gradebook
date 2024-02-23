@@ -48,7 +48,9 @@ def results(State):
                     ),
                 ),
                 rx.table.body(
-                    rx.foreach(State.answers, lambda answer, i: render_answer(State, i)),
+                    rx.foreach(
+                        State.answers, lambda answer, i: render_answer(State, i)
+                    ),
                 ),
             ),
             rx.box(rx.link(rx.button("Take Quiz Again"), href="/")),

@@ -26,7 +26,9 @@ class GradeLetters(QWidget):
         positions = [
             int(position[0] / 100 * self.width()) for position in globals.grade_ranges
         ]
-        for label, vertical_line, pos in zip(self.labels, self.vertical_lines, positions):
+        for label, vertical_line, pos in zip(
+            self.labels, self.vertical_lines, positions
+        ):
             if self.width() < 200:
                 if label.text() in ["C-", "C", "C+", "B-", "B", "B+", "A-", "A+"]:
                     label.setHidden(True)
@@ -42,8 +44,8 @@ class GradeLetters(QWidget):
                 label.setHidden(False)
                 vertical_line.setHidden(False)
             if label.text() == "F":
-                label.move(pos-5, 0)
-                vertical_line.setGeometry(pos+int(label.width()/2)-5, 30, 1, 20)
+                label.move(pos - 5, 0)
+                vertical_line.setGeometry(pos + int(label.width() / 2) - 5, 30, 1, 20)
             else:
-                label.move(pos-15, 0)
-                vertical_line.setGeometry(pos+int(label.width()/2)-15, 30, 1, 20)
+                label.move(pos - 15, 0)
+                vertical_line.setGeometry(pos + int(label.width() / 2) - 15, 30, 1, 20)

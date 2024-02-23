@@ -231,7 +231,11 @@ class CourseWidget(QWidget):
 
     def remove_assessment(self):
         assessments = list(self.course.assessments)
-        current_item = 0 if self.last_selected_assessment is None else assessments.index(self.last_selected_assessment)
+        current_item = (
+            0
+            if self.last_selected_assessment is None
+            else assessments.index(self.last_selected_assessment)
+        )
         item, ok_pressed = QInputDialog.getItem(
             None,
             "Select assessment",
@@ -259,7 +263,9 @@ class CourseWidget(QWidget):
             return
         if len(self.course.assessments) == 0:
             self.clear_layout(self.horizontalLayout_3)
-            self.horizontalLayout_3.addWidget(QLabel("You need to add an assessment", self))
+            self.horizontalLayout_3.addWidget(
+                QLabel("You need to add an assessment", self)
+            )
             return
         if student is None:
             student = self.last_selected_student

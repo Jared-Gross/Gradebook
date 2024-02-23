@@ -2,6 +2,8 @@ import os
 
 import ujson as json
 
+__version__ = "v0.0.2"
+
 
 def initialize():
     global database_location, student_report_html_template, bootstrap_select_css, bootstrap_css, icon_css, main_css, materialize_css, inter_css, bootstrap_select_js, bootstrap_js, jquery_js, main_js, materialize_js, grade_ranges
@@ -27,5 +29,6 @@ def initialize():
     grade_ranges = []
     with open("grade_ranges.json", "r") as file:
         grades: dict[str, int] = json.load(file)
-        for letter_grade, grade in grades.items():
-            grade_ranges.append((grade, letter_grade))
+        grade_ranges.extend(
+            (grade, letter_grade) for letter_grade, grade in grades.items()
+        )
