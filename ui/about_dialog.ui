@@ -207,10 +207,6 @@
           <property name="text">
            <string>  OK</string>
           </property>
-          <property name="icon">
-           <iconset>
-            <normaloff>BreezeStyleSheets/dist/pyqt6/dark/dialog_ok.svg</normaloff>BreezeStyleSheets/dist/pyqt6/dark/dialog_ok.svg</iconset>
-          </property>
           <property name="checkable">
            <bool>false</bool>
           </property>
