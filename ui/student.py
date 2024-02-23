@@ -75,14 +75,14 @@ class StudentWidget(QWidget):
 
     def setup_context_menu(self):
         self.context_menu = QMenu(self)
-        # add_to_course_submenu = QMenu("Add to Course", self)
-        # for course in self.school.courses:
-        #     course_action = QAction(f"{course.name}", self)
-        #     course_action.triggered.connect(
-        #         lambda _, course=course: self.add_to_course(course)
-        #     )
-        #     add_to_course_submenu.addAction(course_action)
-        # self.context_menu.addMenu(add_to_course_submenu)
+        add_to_course_submenu = QMenu("Add to Course", self)
+        for course in self.school.courses:
+            course_action = QAction(f"{course.name}", self)
+            course_action.triggered.connect(
+                lambda _, course=course: self.add_to_course(course)
+            )
+            add_to_course_submenu.addAction(course_action)
+        self.context_menu.addMenu(add_to_course_submenu)
         delete_action = QAction("Delete", self)
         delete_action.triggered.connect(self.delete)
         self.context_menu.addAction(delete_action)

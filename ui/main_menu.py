@@ -1,11 +1,12 @@
 import contextlib
 import os
 from functools import partial
+from typing import Union
 
 import qt_material
 import ujson as json
 from PyQt6 import uic
-from PyQt6.QtCore import QSettings, Qt, QFile, QTextStream
+from PyQt6.QtCore import QFile, QSettings, Qt, QTextStream
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtWidgets import (
     QApplication,
@@ -16,11 +17,12 @@ from PyQt6.QtWidgets import (
     QListWidget,
     QMainWindow,
     QMenu,
+    QMessageBox,
+    QPushButton,
     QScrollArea,
     QTabWidget,
     QVBoxLayout,
     QWidget,
-    QMessageBox,
 )
 
 from ui.about_dialog import AboutDialog
@@ -44,6 +46,7 @@ class MainMenu(QMainWindow):
         self.app = app
         self.settings = QSettings("TheCodingJ's", "Gradiance", self)
         self.setWindowIcon(QIcon(Icons.app_icon))
+        self.showMaximized()
         try:
             self.school = School(
                 self.settings.value(
@@ -66,18 +69,35 @@ class MainMenu(QMainWindow):
         self.tabWidget.setCurrentIndex(
             self.settings.value("last_opened_tab", 0, type=int)
         )
-        self.listWidget_students: QListWidget
+        self.load_ui_types()
         self.listWidget_courses = CoursesListWidget(self.school, self)
         self.courses_list_widget_layout.addWidget(self.listWidget_courses)
         self.load_clicked_events()
         self.load_schools()
         self.load_students()
         self.load_courses()
-        self.showMaximized()
         self.load_themes_menu()
         self.change_theme(
             self.settings.value(f"{self.school.name} - theme", "dark_teal.xml")
         )
+
+    def load_ui_types(self):
+        self.menuTheme: QMenu
+        self.listWidget_students: QListWidget
+        self.courses_list_widget_layout: QVBoxLayout
+        self.verticalLayout_students: QVBoxLayout
+        self.verticalLayout_courses: QVBoxLayout
+        self.actionAdd_Course: QAction
+        self.pushButton_add_course: QPushButton
+        self.pushButton_remove_course: QPushButton
+        self.pushButton_add_student: QPushButton
+        self.actionDelete_Course: QAction
+        self.actionAdd_Student: QAction
+        self.actionDelete_Student: QAction
+        self.actionAdd_New_School: QAction
+        self.actionRemove_School: QAction
+        self.actionAbout: QAction
+        self.actionAbout_Qt: QAction
 
     def load_clicked_events(self):
         self.tabWidget.tabBarClicked.connect(self.main_tab_clicked)
@@ -379,17 +399,7 @@ class MainMenu(QMainWindow):
         about_dialog = AboutDialog(self)
         about_dialog.show()
 
-    def show_file_contents(self, filename):
-        file = QFile(filename)
-        if file.open(QFile.OpenModeFlag.ReadOnly | QFile.OpenModeFlag.Text):
-            stream = QTextStream(file)
-            contents = stream.readAll()
-            QMessageBox.information(self, "File Contents", contents)
-            file.close()
-        else:
-            QMessageBox.warning(self, "Error", f"Failed to open {filename}")
-
-    def clear_layout(self, layout):
+    def clear_layout(self, layout: Union[QVBoxLayout, QWidget]):
         with contextlib.suppress(AttributeError):
             if layout is not None:
                 while layout.count():

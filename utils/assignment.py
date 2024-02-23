@@ -1,3 +1,5 @@
+from typing import Union
+
 from utils.assignment_template import AssignmentTemplate
 from utils.letter_grade import get_letter_grade
 
@@ -16,7 +18,7 @@ class Assignment:
     def get_worth(self) -> float:
         return self.template.worth
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Union[str, float]]:
         return {
             "name": self.template.name,
             "score": self.score,
@@ -28,7 +30,7 @@ class Assignment:
 
     def get_percentage(self) -> float:
         try:
-            return self.score / self.template.worth * 100
+            return self.score / self.get_worth() * 100
         except ZeroDivisionError:
             return 0.0
 

@@ -1,5 +1,6 @@
 import copy
 import os
+from typing import Any, Union
 
 from utils import globals
 from utils.assignment import Assignment
@@ -14,17 +15,11 @@ class Course:
         self.students: list[Student] = []
         self.assignment_templates: dict[str, list[AssignmentTemplate]] = {}
         self.assessments: dict[str, dict[Student, list[Assignment]]] = {}
-        # newpath = f"{globals.database_location}/{self.name}"
-        # if not os.path.exists(newpath):
-        #     os.makedirs(newpath)
 
     def add_student(self, student: Student):
         self.students.append(student)
         for assessment in self.assessments:
             self.assessments[assessment][student] = []
-            # newpath = f"{globals.database_location}/{self.name}/{student.first_name} {student.last_name}/{assessment}"
-            # if not os.path.exists(newpath):
-            #     os.makedirs(newpath)
 
     def remove_student(self, student: Student):
         self.students.remove(student)
@@ -32,10 +27,7 @@ class Course:
             del self.assessments[assessment][student]
 
     def is_student_enrolled(self, other_student: Student) -> bool:
-        for student in self.students:
-            if student == other_student:
-                return True
-        return False
+        return any(student == other_student for student in self.students)
 
     def add_assessment(self, name: str):
         self.assessments.setdefault(name, {})
@@ -43,9 +35,6 @@ class Course:
         self.grading.setdefault(name, 0.0)
         for student in self.students:
             self.assessments[name].setdefault(student, [])
-        # newpath = f"{globals.database_location}/{self.name}/Assessments/{name}"
-        # if not os.path.exists(newpath):
-        #     os.makedirs(newpath)
 
     def rename_assessment(self, old_name: str, new_name: str):
         self.assessments[new_name] = self.assessments[old_name]
@@ -71,18 +60,22 @@ class Course:
     def does_template_exist(
         self, assessment: str, other_template: AssignmentTemplate
     ) -> bool:
-        for template in self.assignment_templates[assessment]:
-            if template.name == other_template.name:
-                return True
-        return False
+        return any(
+            template.name == other_template.name
+            for template in self.assignment_templates[assessment]
+        )
 
     def get_template(
         self, assessment: str, template_name: str
     ) -> AssignmentTemplate | None:
-        for template in self.assignment_templates[assessment]:
-            if template.name == template_name:
-                return template
-        return None
+        return next(
+            (
+                template
+                for template in self.assignment_templates[assessment]
+                if template.name == template_name
+            ),
+            None,
+        )
 
     def sync_assignments(self, student: Student):
         for assessment, templates in self.assignment_templates.items():
@@ -100,12 +93,9 @@ class Course:
                 assignment.score = get_score(assignment)
                 new_assignemts.append(assignment)
             self.assessments[assessment][student] = new_assignemts
-            # self.add_coursework(assessment, student, assignment)
 
     def add_coursework(self, assessment: str, student: Student, assignment: Assignment):
         self.assessments[assessment][student].append(assignment)
-        # template = AssignmentTemplate(assignment.name, assignment.worth)
-        # self.assignment_templates[assessment].append(template)
 
     def remove_coursework(
         self, assessment: str, student: Student, assignment_to_delete: Assignment | str
@@ -126,7 +116,17 @@ class Course:
                     for assignment in assignments:
                         assignment.template = template
 
-    def to_dict(self) -> dict:
+    def to_dict(
+        self,
+    ) -> dict[
+        str,
+        Union[
+            list[str],
+            dict[str, dict[str, list[dict[str, Any]]]],
+            dict[str, dict[str, list[dict[str, Any]]]],
+            Any,
+        ],
+    ]:
         data = {
             "students": [],
             "assignment_templates": {},
@@ -135,10 +135,6 @@ class Course:
         }
         for student in self.students:
             data["students"].append(student.id)
-        # for assessment, templates_data in self.assignment_templates.items():
-        #     data['assignment_templates'][assessment] = []
-        #     for assignment in templates_data:
-        #         data["assignment_templates"][assessment].append(assignment.to_dict())
         for assessment in self.assessments:
             data["assessments"][assessment] = {}
             for student in self.assessments[assessment]:

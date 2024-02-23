@@ -1,6 +1,6 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QResizeEvent
-from PyQt6.QtWidgets import QLabel, QWidget, QFrame
+from PyQt6.QtWidgets import QFrame, QLabel, QWidget
 
 from utils import globals
 

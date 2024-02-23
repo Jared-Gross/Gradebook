@@ -2,6 +2,7 @@ import contextlib
 import random
 import uuid
 from datetime import datetime
+from typing import Union
 
 from PyQt6.QtGui import QColor
 
@@ -94,10 +95,8 @@ class Student:
             current_grade = self.get_grade_level(age)
             age += 1  # Move to the next age
             next_grade = self.get_grade_level(age)
-            next_starting_age = int(age)
-            next_starting_year = datetime.strptime(
-                self.birthday, "%Y-%m-%d"
-            ).year + int(age)
+            next_starting_age = age
+            next_starting_year = datetime.strptime(self.birthday, "%Y-%m-%d").year + age
             next_grade_levels.append(
                 (next_grade, next_starting_age, next_starting_year)
             )
@@ -105,19 +104,19 @@ class Student:
         return next_grade_levels
 
     def from_dict(self, data: dict):
-        self.first_name = data["first_name"]
-        self.middle_name = data["middle_name"]
-        self.last_name = data["last_name"]
-        self.gender = data["gender"]
-        self.birthday = data["birthday"]
-        self.colony = data["colony"]
-        self.notes = data.get("notes", "")
-        self.id = data["id"]
+        self.first_name: str = data["first_name"]
+        self.middle_name: str = data["middle_name"]
+        self.last_name: str = data["last_name"]
+        self.gender: str = data["gender"]
+        self.birthday: str = data["birthday"]
+        self.colony: str = data["colony"]
+        self.notes: str = data.get("notes", "")
+        self.id: str = data["id"]
         self.name: str = f"{self.first_name} {self.last_name}"
         self.icon: str = data["icon"]
         self.color = QColor(data["color"][0], data["color"][1], data["color"][2])
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> dict[str, Union[str, int, list[int, int, int]]]:
         return {
             "first_name": self.first_name,
             "middle_name": self.middle_name,

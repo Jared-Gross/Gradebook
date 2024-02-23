@@ -5,11 +5,11 @@ import ujson as json
 from PyQt6 import uic
 from PyQt6.QtCore import QSettings, Qt
 from PyQt6.QtWidgets import (
-    QLabel,
     QDoubleSpinBox,
     QGroupBox,
     QHeaderView,
     QInputDialog,
+    QLabel,
     QStyledItemDelegate,
     QTableWidget,
     QTabWidget,

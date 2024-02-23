@@ -1,7 +1,10 @@
+import pathlib
+
 from utils import globals
 from utils.assignment import Assignment
 from utils.course import Course
 from utils.letter_grade import get_letter_grade
+from utils.open_folder import open_folder
 from utils.school import School
 from utils.student import Student
 
@@ -11,9 +14,11 @@ class StudentReport:
         self.school = school
         self.student = student
         self.courses = self.school.get_enrolled_courses(self.student)
-        with open(globals.student_report_html_template) as file:
-            self.student_report_html_template = file.read()
+        self.student_report_html_template = pathlib.Path(
+            globals.student_report_html_template
+        ).read_text()
         self.generated_html_file = self.student_report_html_template
+        self.file_name: str = f"{self.student.name}.html"
 
     def generate(self) -> str:
         grand_total_score = 0.0
@@ -108,7 +113,10 @@ class StudentReport:
                 course_total_worth += assessment_total_worth
             grand_total_weighted_score += course_total_weighted_score
             grand_total_weighted_worth += course_total_weighted_worth
-            summary_html += f'<tr><td><a href="#{course.name}">{course.name}</a></td><td>{round(course_total_score, 2)}/{round(course_total_worth, 2)}</td><td>{round(course_total_weighted_score, 2)}/{course_total_weighted_worth}</td><td>{round(course_total_weighted_score, 2)}%</td><td>{get_letter_grade(course_total_weighted_score/course_total_weighted_worth*100)}</td></tr>'
+            try:
+                summary_html += f'<tr><td><a href="#{course.name}">{course.name}</a></td><td>{round(course_total_score, 2)}/{round(course_total_worth, 2)}</td><td>{round(course_total_weighted_score, 2)}/{course_total_weighted_worth}</td><td>{round(course_total_weighted_score, 2)}%</td><td>{get_letter_grade(course_total_weighted_score/course_total_weighted_worth*100)}</td></tr>'
+            except ZeroDivisionError:
+                summary_html += f'<tr><td><a href="#{course.name}">{course.name}</a></td><td>{round(course_total_score, 2)}/{round(course_total_worth, 2)}</td><td>{round(course_total_weighted_score, 2)}/{course_total_weighted_worth}</td><td>{round(course_total_weighted_score, 2)}%</td><td>{get_letter_grade(0.0)}</td></tr>'
             course_html += '<div class="page-break"></div>'
             course_html += "</div>"
             course_html += "</div>"
@@ -129,9 +137,12 @@ class StudentReport:
         self.generated_html_file = self.generated_html_file.replace(
             "[[ STUDENT ]]", student_html
         )
-        with open("test.html", "w") as f:
+        with open(
+            f"{globals.database_location}/{self.school.name}/{self.file_name}", "w"
+        ) as f:
             f.write(self.generated_html_file)
 
+        open_folder(f"{globals.database_location}/{self.school.name}/{self.file_name}")
         return self.generated_html_file
 
     def load_imports(self):

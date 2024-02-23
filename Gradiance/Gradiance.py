@@ -1,8 +1,10 @@
 """Welcome to Reflex! This file outlines the steps to create a basic app."""
-import reflex as rx
 import copy
-from .results import results
 from typing import Any, List
+
+import reflex as rx
+
+from .results import results
 
 question_style = {
     "bg": "white",

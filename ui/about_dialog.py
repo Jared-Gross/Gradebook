@@ -1,11 +1,10 @@
 from PyQt6 import uic
 from PyQt6.QtCore import QFile, Qt, QTextStream
-from PyQt6.QtGui import QIcon, QPixmap, QFont
-from PyQt6.QtWidgets import QDialog
-
-from utils.icons import Icons
+from PyQt6.QtGui import QIcon, QPixmap
+from PyQt6.QtWidgets import QDialog, QLabel, QPushButton, QTextEdit
 
 from utils import globals
+from utils.icons import Icons
 
 
 class AboutDialog(QDialog):
@@ -14,6 +13,12 @@ class AboutDialog(QDialog):
         uic.loadUi("ui/about_dialog.ui", self)
         self.setWindowIcon(QIcon(Icons.app_icon))
         pixmap = QPixmap(Icons.app_icon)
+        self.lblIcon: QLabel
+        self.lblTitle: QLabel
+        self.lblHome: QLabel
+        self.textEdit: QTextEdit
+        self.textEdit_2: QTextEdit
+        self.btnClose: QPushButton
         self.lblIcon.setFixedSize(200, 200)
         scaled_pixmap = pixmap.scaled(
             self.lblIcon.size(), Qt.AspectRatioMode.KeepAspectRatio

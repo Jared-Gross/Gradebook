@@ -1,4 +1,5 @@
 import os
+from typing import Union
 
 import ujson as json
 
@@ -16,7 +17,10 @@ class School:
             os.makedirs(f"{globals.database_location}/{self.name}")
         self.students: list[Student] = []
         self.courses: list[Course] = []
-        self.data = {"students": self.students, "courses": self.courses}
+        self.data: dict[str, Union[list[Course], list[Student]]] = {
+            "students": self.students,
+            "courses": self.courses,
+        }
 
     def add_student(self, student: Student):
         self.students.append(student)
@@ -45,22 +49,20 @@ class School:
             json.dump(self.to_dict(), file, indent=4)
 
     def get_student(self, id: str) -> Student:
-        for student in self.students:
-            if student.id == id:
-                return student
-        return None
+        return next((student for student in self.students if student.id == id), None)
 
     def get_student_from_name(self, name: str) -> Student:
-        for student in self.students:
-            if f"{student.first_name} {student.last_name}" == name:
-                return student
-        return None
+        return next(
+            (
+                student
+                for student in self.students
+                if f"{student.first_name} {student.last_name}" == name
+            ),
+            None,
+        )
 
     def get_course(self, name: str) -> Course:
-        for course in self.courses:
-            if course.name == name:
-                return course
-        return None
+        return next((course for course in self.courses if course.name == name), None)
 
     def get_enrolled_courses(self, student: Student) -> list[Course]:
         return [

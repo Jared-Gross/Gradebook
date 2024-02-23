@@ -7,9 +7,8 @@ __version__ = "v0.0.2"
 
 def initialize():
     global database_location, student_report_html_template, bootstrap_select_css, bootstrap_css, icon_css, main_css, materialize_css, inter_css, bootstrap_select_js, bootstrap_js, jquery_js, main_js, materialize_js, grade_ranges
-    database_location = (
-        r"C:\Users\Jared\Documents\Code\Python-Projects\Gradiance\database"
-    )
+    with open("DATABASE_LOCATION.txt") as file:
+        database_location = os.path.normpath(file.read().strip())
     student_report_html_template = (
         os.getcwd() + r"\static\templates\student_report.html"
     )
