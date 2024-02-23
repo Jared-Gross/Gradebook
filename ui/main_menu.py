@@ -167,9 +167,9 @@ class MainMenu(QMainWindow):
         ]
         courses_order: list[Course] = []
         for tab in tab_order:
-            for course in self.school.courses:
-                if tab == course.name:
-                    courses_order.append(course)
+            courses_order.extend(
+                course for course in self.school.courses if tab == course.name
+            )
         self.school.courses = courses_order
         self.school.save()
 

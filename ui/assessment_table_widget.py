@@ -85,7 +85,7 @@ class AssessmentTableWidget(QTableWidget):
             if assignment_name == "":
                 return
             template = self.course.get_template(self.assessment, assignment_name)
-            if template == None:
+            if template is None:
                 template = AssignmentTemplate(assignment_name, 0.0)
                 self.course.add_template(self.assessment, template)
             self.course.add_coursework(
@@ -130,8 +130,7 @@ class AssessmentTableWidget(QTableWidget):
         self.context_menu.exec(self.mapToGlobal(pos))
 
     def delete(self):
-        selected_items = self.selectedItems()
-        if selected_items:
+        if selected_items := self.selectedItems():
             selected_row = selected_items[0].row()
             assignment_to_delete = self.item(selected_row, 0).text()
             self.course.remove_coursework(
@@ -154,7 +153,7 @@ class AssessmentTableWidget(QTableWidget):
             for i in range(number_of_elemets):
                 assignment_name = f"{text} {i+1}"
                 template = self.course.get_template(self.assessment, assignment_name)
-                if template == None:
+                if template is None:
                     template = AssignmentTemplate(assignment_name, 0.0)
                     self.course.add_template(self.assessment, template)
                 self.course.add_coursework(

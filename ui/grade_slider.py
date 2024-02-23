@@ -57,9 +57,9 @@ class GradeSlider(QWidget):
         new_grade = self.lineEdit_input.text().strip()
         if "/" not in new_grade:
             worth = 100
+        elif new_grade.split("/")[-1] == "":
+            return
         else:
-            if new_grade.split("/")[-1] == "":
-                return
             worth = float(new_grade.split("/")[-1])
 
         score = float(new_grade.split("/")[0])
