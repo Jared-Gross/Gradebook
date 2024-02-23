@@ -3,23 +3,27 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/TheCodingJsoftware/Gradiance/blob/master/LICENSE" alt="License">
-        <img src="https://img.shields.io/github/license/TheCodingJsoftware/Gradiance?color=blue&style=for-the-badge" /></a>
+    <a href="https://github.com/TheCodingJsoftware/Gradiance/blob/master/LICENSE">
+        <img src="https://img.shields.io/github/license/TheCodingJsoftware/Gradiance?color=blue&style=for-the-badge">
+    </a>
     <a href="https://img.shields.io/static/v1?label=Platform&message=Windows|Linux&color=blue&style=for-the-badge">
-        <img src="https://img.shields.io/static/v1?label=Platform&message=Windows&color=blue&style=for-the-badge" /></a>
-    <a href="https://img.shields.io/github/repo-size/TheCodingJsoftware/Gradiance?label=Size&style=for-the-badge" alt="Size">
-        <img src="https://img.shields.io/github/repo-size/TheCodingJsoftware/Gradiance?label=Size&style=for-the-badge" /></a>
-    <a href="https://img.shields.io/github/commit-activity/m/TheCodingJsoftware/Gradiance?style=for-the-badge" alt="Commits">
-        <img src="https://img.shields.io/github/commit-activity/m/TheCodingJsoftware/Gradiance?style=for-the-badge" /></a>
+        <img src="https://img.shields.io/static/v1?label=Platform&message=Windows&color=blue&style=for-the-badge">
+    </a>
+    <a href="https://img.shields.io/github/repo-size/TheCodingJsoftware/Gradiance?label=Size&style=for-the-badge">
+        <img src="https://img.shields.io/github/repo-size/TheCodingJsoftware/Gradiance?label=Size&style=for-the-badge">
+    </a>
+    <a href="https://img.shields.io/github/commit-activity/m/TheCodingJsoftware/Gradiance?style=for-the-badge">
+        <img src="https://img.shields.io/github/commit-activity/m/TheCodingJsoftware/Gradiance?style=for-the-badge">
+    </a>
     <a href="https://img.shields.io/github/v/tag/TheCodingJsoftware/Gradiance?label=Release&logoColor=blue&style=for-the-badge">
-        <img src="https://img.shields.io/github/v/tag/TheCodingJsoftware/Gradiance?label=Release&logoColor=blue&style=for-the-badge"
-            alt="Discord"></a>
+        <img src="https://img.shields.io/github/v/tag/TheCodingJsoftware/Gradiance?label=Release&logoColor=blue&style=for-the-badge">
+    </a>
     <a href="https://img.shields.io/github/languages/count/TheCodingJsoftware/Gradiance?style=for-the-badge">
-        <img src="https://img.shields.io/github/languages/count/TheCodingJsoftware/Gradiance?style=for-the-badge"
-            alt="Languages"></a>
+        <img src="https://img.shields.io/github/languages/count/TheCodingJsoftware/Gradiance?style=for-the-badge">
+    </a>
     <a href="https://img.shields.io/github/languages/top/TheCodingJsoftware/Gradiance?style=for-the-badge">
-        <img src="https://img.shields.io/github/languages/top/TheCodingJsoftware/Gradiance?style=for-the-badge"
-            alt="Top_Language"></a>
+        <img src="https://img.shields.io/github/languages/top/TheCodingJsoftware/Gradiance?style=for-the-badge">
+    </a>
 </p>
 <p align="center">
     <img src="https://forthebadge.com/images/badges/made-with-python.svg">
