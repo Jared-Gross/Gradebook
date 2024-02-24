@@ -1,8 +1,8 @@
 import ujson as json
 from PyQt6 import uic
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtGui import QAction, QImage, QPixmap
-from PyQt6.QtWidgets import QMenu, QWidget
+from PyQt6.QtGui import QAction, QImage, QPixmap, QColor
+from PyQt6.QtWidgets import QMenu, QWidget, QLabel
 
 from ui.student_dialog import StudentDialog
 from utils import globals
@@ -22,6 +22,8 @@ class StudentWidget(QWidget):
         self.student: Student = student
         self.school: School = school
         self.parent = parent
+        self.widget: QWidget
+        self.label_icon: QLabel
         self.label_name.setText(self.student.name)
         self.label_age.setText(f"{self.student.get_age()} years old")
         self.label_school_stage.setText(
@@ -29,21 +31,29 @@ class StudentWidget(QWidget):
         )
         self.label_icon.setPixmap(QPixmap(self.student.icon))
         self.setup_context_menu()
-        color = f"border: 1px solid rgb({self.student.color.red()}, {self.student.color.green()}, {self.student.color.blue()});"
-        background_color = darken_color(self.student.color, 1.2)
+        background_color = QColor(38, 42, 46)
+        darker_background_color = darken_color(background_color, 2)
+        hover_background_color = lighten_color(background_color, 1.2)
+        color = f"border: 2px solid rgb({self.student.color.red()}, {self.student.color.green()}, {self.student.color.blue()});"
         hover_color = lighten_color(self.student.color, 1.2)
         pressed_color = darken_color(self.student.color, 2)
         background = f"background-color: rgb({background_color.red()}, {background_color.green()}, {background_color.blue()});"
-        hover = (
-            "QWidget#widget:hover { background: rgb("
-            + f"{hover_color.red()}, {hover_color.green()}, {hover_color.blue()}"
-            + ");}"
+        self.pressed_style = (
+            "QWidget#widget{"
+            + "border: 2px solid rgb(" + f"{self.student.color.red()}, {self.student.color.green()}, {self.student.color.blue()}" + ");"
+            + "border-radius: 5px;"
+            + "background-color: rgb(" + f"{pressed_color.red()}, {pressed_color.green()}, {pressed_color.blue()}" + "); }"
         )
-        normal = "QWidget#widget{" + color + " border-radius: 10px;" + background + "}"
-        self.widget.setStyleSheet(normal + hover)
+        self.hover_style = (
+            "QWidget#widget:hover{"
+            + "border-color: rgb(" + f"{self.student.color.red()}, {self.student.color.green()}, {self.student.color.blue()}" + "); }"
+        )
+        self.normal_style = "QWidget#widget{" + color + " border-radius: 5px;" + background + "}"
+        self.widget.setStyleSheet(self.normal_style + self.hover_style)
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton:
+            self.widget.setStyleSheet(self.pressed_style)
             student_dialog = StudentDialog(self.student, self.school, self)
             if student_dialog.exec():
                 current_tab = self.parent.tabWidget.tabText(
@@ -53,6 +63,7 @@ class StudentWidget(QWidget):
                     self.parent.load_students()
                 elif current_tab == "courses":
                     self.parent.load_courses()
+            self.widget.setStyleSheet(self.normal_style + self.hover_style)
 
     def enterEvent(self, event):
         self.setCursor(Qt.CursorShape.PointingHandCursor)
