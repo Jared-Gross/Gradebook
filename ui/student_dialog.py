@@ -6,7 +6,8 @@ import ujson as json
 from PyQt6 import uic
 from PyQt6.QtCore import QDate, Qt
 from PyQt6.QtGui import QColor, QImage, QPixmap
-from PyQt6.QtWidgets import QColorDialog, QDialog, QInputDialog, QToolBox, QWidget
+from PyQt6.QtWidgets import (QColorDialog, QDialog, QInputDialog, QToolBox,
+                             QWidget)
 
 from ui.student_summary_widget import StudentSummaryWidget
 from utils import globals

@@ -5,7 +5,12 @@
 .vscode
 
 .web
+
+DATABASE_LOCATION.txt
+
 __pycache__
+
+ui/__pycache__/
 
 __pycache__/
 

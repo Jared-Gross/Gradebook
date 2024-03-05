@@ -4,17 +4,9 @@ import ujson as json
 from PyQt6 import uic
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QAction
-from PyQt6.QtWidgets import (
-    QAbstractScrollArea,
-    QHeaderView,
-    QInputDialog,
-    QMenu,
-    QTableWidget,
-    QTableWidgetItem,
-    QTabWidget,
-    QToolBox,
-    QWidget,
-)
+from PyQt6.QtWidgets import (QAbstractScrollArea, QHeaderView, QInputDialog,
+                             QMenu, QTableWidget, QTableWidgetItem, QTabWidget,
+                             QToolBox, QWidget)
 
 from ui.grade_slider import GradeSlider
 from ui.student import StudentWidget

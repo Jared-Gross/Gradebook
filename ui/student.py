@@ -1,8 +1,8 @@
 import ujson as json
 from PyQt6 import uic
 from PyQt6.QtCore import Qt, pyqtSignal
-from PyQt6.QtGui import QAction, QImage, QPixmap, QColor
-from PyQt6.QtWidgets import QMenu, QWidget, QLabel
+from PyQt6.QtGui import QAction, QColor, QImage, QPixmap
+from PyQt6.QtWidgets import QLabel, QMenu, QWidget
 
 from ui.student_dialog import StudentDialog
 from utils import globals
@@ -40,15 +40,23 @@ class StudentWidget(QWidget):
         background = f"background-color: rgb({background_color.red()}, {background_color.green()}, {background_color.blue()});"
         self.pressed_style = (
             "QWidget#widget{"
-            + "border: 2px solid rgb(" + f"{self.student.color.red()}, {self.student.color.green()}, {self.student.color.blue()}" + ");"
+            + "border: 2px solid rgb("
+            + f"{self.student.color.red()}, {self.student.color.green()}, {self.student.color.blue()}"
+            + ");"
             + "border-radius: 5px;"
-            + "background-color: rgb(" + f"{pressed_color.red()}, {pressed_color.green()}, {pressed_color.blue()}" + "); }"
+            + "background-color: rgb("
+            + f"{pressed_color.red()}, {pressed_color.green()}, {pressed_color.blue()}"
+            + "); }"
         )
         self.hover_style = (
             "QWidget#widget:hover{"
-            + "border-color: rgb(" + f"{self.student.color.red()}, {self.student.color.green()}, {self.student.color.blue()}" + "); }"
+            + "border-color: rgb("
+            + f"{self.student.color.red()}, {self.student.color.green()}, {self.student.color.blue()}"
+            + "); }"
         )
-        self.normal_style = "QWidget#widget{" + color + " border-radius: 5px;" + background + "}"
+        self.normal_style = (
+            "QWidget#widget{" + color + " border-radius: 5px;" + background + "}"
+        )
         self.widget.setStyleSheet(self.normal_style + self.hover_style)
 
     def mousePressEvent(self, event):

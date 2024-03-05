@@ -1,0 +1,156 @@
+@import url(https://fonts.googleapis.com/css?family=Crimson+Text:400,700,900,400italic,700italic,900italic|Playfair+Display:400,700,900,400italic,700italic,900italic|Rock+Salt:400);
+
+#home{
+    bottom: 35px;
+    right: 25px;
+    position: fixed;
+}
+
+#check{
+    margin-top: 50px;
+}
+#playAgain{
+    bottom: 130px;
+    left: 45%;
+    position: fixed;
+}
+#submitScore{
+    bottom: 130px;
+    left: 45%;
+    position: fixed;
+    display: none;
+}
+
+h4 {
+    text-align: center;
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+.text {
+    margin: 5vw;
+}
+
+button.song {
+    margin: 3px;
+    padding: 5px;
+}
+
+.btn,
+.btn-large,
+.btn-small,
+.btn-flat {
+    text-transform: none;
+    margin: 3px;
+}
+
+summary {
+    list-style: none;
+    padding: 10px;
+}
+
+details {
+    font-size: 20px;
+    font-weight: bold;
+    background: #27ab9f;
+    border-radius: 3px;
+    cursor: pointer;
+    display: block;
+    position: relative;
+    transition: 1s background linear;
+    margin: 5px;
+    color: white;
+}
+
+details:hover,
+details:focus {
+    background: #2cc7b8;
+    transition: 0.3s color linear;
+    color: black;
+}
+
+details:before {
+    content: "";
+}
+
+details[open] {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background: #16625bdc;
+    animation: animateDown 0.15s linear forwards;
+}
+
+
+#details-group[open] {
+    text-decoration: underline;
+    background: #145751;
+}
+
+@keyframes animateDown {
+    0% {
+        opacity: 0;
+        transform: translatey(-15px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translatey(0);
+    }
+}
+
+#header {
+    text-align: center;
+    margin: 0;
+    margin-top: 10px;
+}
+
+.page-footer {    
+    bottom: 30px;
+    left: 0;
+    position: fixed;
+    width: 100%;
+    height: 150px;
+    background-color: #3b8f89;
+}
+
+#noTextMessage {
+    text-align: center;
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    background-color: #3b8f89;
+    z-index: 10;
+}
+.side-nav li {
+    text-decoration: none;
+}
+
+.fixed-action-btn.horizontal ul li {
+    margin: 15px 5px 0 0;
+}
+
+.content {
+    margin: 40px;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+@media screen and (max-width: 450px) {
+    details .btn {
+        width: 98%;
+    }
+}

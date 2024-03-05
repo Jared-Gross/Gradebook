@@ -8,22 +8,10 @@ import ujson as json
 from PyQt6 import uic
 from PyQt6.QtCore import QFile, QSettings, Qt, QTextStream
 from PyQt6.QtGui import QAction, QIcon
-from PyQt6.QtWidgets import (
-    QApplication,
-    QDialog,
-    QGroupBox,
-    QHBoxLayout,
-    QInputDialog,
-    QListWidget,
-    QMainWindow,
-    QMenu,
-    QMessageBox,
-    QPushButton,
-    QScrollArea,
-    QTabWidget,
-    QVBoxLayout,
-    QWidget,
-)
+from PyQt6.QtWidgets import (QApplication, QDialog, QGroupBox, QHBoxLayout,
+                             QInputDialog, QListWidget, QMainWindow, QMenu,
+                             QMessageBox, QPushButton, QScrollArea, QTabWidget,
+                             QVBoxLayout, QWidget)
 
 from ui.about_dialog import AboutDialog
 from ui.add_student import AddStudent
@@ -65,6 +53,10 @@ class MainMenu(QMainWindow):
             )
         except IndexError:
             self.last_selected_course: str = ""
+        self.change_theme(
+            self.settings.value(f"{self.school.name} - theme", "dark_teal.xml")
+        )
+
         self.tabWidget: QTabWidget
         self.tabWidget.setCurrentIndex(
             self.settings.value("last_opened_tab", 0, type=int)
@@ -77,9 +69,6 @@ class MainMenu(QMainWindow):
         self.load_students()
         self.load_courses()
         self.load_themes_menu()
-        self.change_theme(
-            self.settings.value(f"{self.school.name} - theme", "dark_teal.xml")
-        )
 
     def load_ui_types(self):
         self.menuTheme: QMenu

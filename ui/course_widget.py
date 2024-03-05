@@ -4,20 +4,10 @@ import copy
 import ujson as json
 from PyQt6 import uic
 from PyQt6.QtCore import QSettings, Qt
-from PyQt6.QtWidgets import (
-    QDoubleSpinBox,
-    QGroupBox,
-    QHeaderView,
-    QInputDialog,
-    QLabel,
-    QStyledItemDelegate,
-    QTableWidget,
-    QTabWidget,
-    QToolBox,
-    QTreeWidgetItem,
-    QVBoxLayout,
-    QWidget,
-)
+from PyQt6.QtWidgets import (QDoubleSpinBox, QGroupBox, QHeaderView,
+                             QInputDialog, QLabel, QStyledItemDelegate,
+                             QTableWidget, QTabWidget, QToolBox,
+                             QTreeWidgetItem, QVBoxLayout, QWidget)
 
 from ui.assessment_tab_widget import AssessmentTabWidget
 from ui.assessment_table_widget import AssessmentTableWidget
