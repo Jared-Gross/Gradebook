@@ -1,8 +1,15 @@
 import ujson as json
 from PyQt6 import uic
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import (QHeaderView, QTableWidget, QTabWidget, QToolBox,
-                             QTreeWidget, QTreeWidgetItem, QWidget)
+from PyQt6.QtWidgets import (
+    QHeaderView,
+    QTableWidget,
+    QTabWidget,
+    QToolBox,
+    QTreeWidget,
+    QTreeWidgetItem,
+    QWidget,
+)
 
 from utils import globals
 from utils.assignment import Assignment

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>799</width>
+    <height>529</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,1">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Grade levels:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="listWidget_grade_levels">
+         <item>
+          <property name="text">
+           <string>Pre-Kindergarten</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Kindergarten</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Grade 1</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Grade 2</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Grade 3</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Grade 4</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Grade 5</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Grade 6</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Grade 7</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Grade 8</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Grade 9</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Grade 10</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Grade 11</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Grade 12</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0,0">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Assessments:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="assessments_layout"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_add_assessment">
+         <property name="text">
+          <string>Add Assessment</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_remove_assessment">
+         <property name="text">
+          <string>Remove Assessment</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_4" stretch="0,1">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Questions:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="questions_layout"/>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

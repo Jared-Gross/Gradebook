@@ -2,8 +2,14 @@ import ujson as json
 from PyQt6 import uic
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPainter
-from PyQt6.QtWidgets import (QInputDialog, QStyle, QStyleOptionTab, QTabBar,
-                             QTabWidget, QWidget)
+from PyQt6.QtWidgets import (
+    QInputDialog,
+    QStyle,
+    QStyleOptionTab,
+    QTabBar,
+    QTabWidget,
+    QWidget,
+)
 
 from ui.course_widget import CourseWidget
 from utils import globals

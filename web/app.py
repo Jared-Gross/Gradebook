@@ -1,7 +1,6 @@
 import asyncio
-import sys
 import os
-import ujson as json
+import sys
 from datetime import datetime
 from io import StringIO
 
@@ -11,15 +10,15 @@ import tornado.ioloop
 import tornado.web
 import tornado.websocket
 from ansi2html import Ansi2HTMLConverter
+from games.prime_factorization import PrimeFactorizationHandler
 from markupsafe import Markup
 
-from games.prime_factorization import PrimeFactorizationHandler
 from utils import globals
 from utils.colors import Colors
 from utils.custom_print import CustomPrint
 from utils.school import School
-from utils.sessions import sessions
 from utils.score_messages import random_message
+from utils.sessions import sessions
 
 globals.initialize()
 
@@ -159,10 +158,10 @@ class ViewScoreHandler(tornado.web.RequestHandler):
             self.redirect("/login")
             return
         sessions[current_ip]["current_game"] = "nothing"
-        score = self.get_query_argument('score', default=0)
-        worth = self.get_query_argument('worth', default=0)
-        checks_used = self.get_query_argument('checks_used', default=0)
-        html_name = self.get_query_argument('game_played', default="")
+        score = self.get_query_argument("score", default=0)
+        worth = self.get_query_argument("worth", default=0)
+        checks_used = self.get_query_argument("checks_used", default=0)
+        html_name = self.get_query_argument("game_played", default="")
         game_played = html_name.replace("_", " ").title()
         template = env.get_template("score.html")
         rendered_template = template.render(
@@ -172,7 +171,7 @@ class ViewScoreHandler(tornado.web.RequestHandler):
             score=score,
             worth=worth,
             checks_used=checks_used,
-            message=random_message(float(score))
+            message=random_message(float(score)),
         )
         self.write(rendered_template)
 
@@ -184,12 +183,19 @@ class SubmitScoreHandler(tornado.web.RequestHandler):
             if current_ip not in sessions or not sessions[current_ip]["logged_in"]:
                 self.redirect("/login")
                 return
-            score = self.get_body_argument('score', 0)
-            worth = self.get_body_argument('worth', 0)
-            checks_used = self.get_body_argument('checks_used', 0)
-            game_played = self.get_body_argument('game_played', "")
-            self.write({"success": True, "redirect": f"/view_score?score={score}&worth={worth}&checks_used={checks_used}&game_played={game_played}"})
-            CustomPrint.print(f"INFO - {sessions[current_ip]['username']} - score: {score}/{worth} - played: {game_played} - checks: {checks_used}")
+            score = self.get_body_argument("score", 0)
+            worth = self.get_body_argument("worth", 0)
+            checks_used = self.get_body_argument("checks_used", 0)
+            game_played = self.get_body_argument("game_played", "")
+            self.write(
+                {
+                    "success": True,
+                    "redirect": f"/view_score?score={score}&worth={worth}&checks_used={checks_used}&game_played={game_played}",
+                }
+            )
+            CustomPrint.print(
+                f"INFO - {sessions[current_ip]['username']} - score: {score}/{worth} - played: {game_played} - checks: {checks_used}"
+            )
         except Exception as e:
             self.set_status(500)
             self.write("An error occurred: " + str(e))
@@ -213,7 +219,8 @@ def make_app():
             (r"/submit-score", SubmitScoreHandler),
             (r"/view_score", ViewScoreHandler),
             (r"/prime_factorization", PrimeFactorizationHandler),
-        ], **settings
+        ],
+        **settings,
     )
 
 

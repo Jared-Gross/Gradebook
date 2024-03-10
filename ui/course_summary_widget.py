@@ -9,11 +9,25 @@ import qt_material
 from natsort import natsorted
 from PyQt6.QtCore import QSettings, Qt
 from PyQt6.QtGui import QAction, QColor
-from PyQt6.QtWidgets import (QAbstractScrollArea, QHeaderView, QMenu,
-                             QTableWidget, QTableWidgetItem, QTabWidget,
-                             QToolBox, QVBoxLayout, QWidget)
-from pyqtgraph import (AxisItem, GraphicsLayout, InfiniteLine, PlotDataItem,
-                       ScatterPlotItem, TextItem)
+from PyQt6.QtWidgets import (
+    QAbstractScrollArea,
+    QHeaderView,
+    QMenu,
+    QTableWidget,
+    QTableWidgetItem,
+    QTabWidget,
+    QToolBox,
+    QVBoxLayout,
+    QWidget,
+)
+from pyqtgraph import (
+    AxisItem,
+    GraphicsLayout,
+    InfiniteLine,
+    PlotDataItem,
+    ScatterPlotItem,
+    TextItem,
+)
 
 from utils.course import Course
 from utils.student import Student

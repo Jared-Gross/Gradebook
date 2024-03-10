@@ -1,0 +1,1 @@
+C:\Users\jared\Documents\Code\Gradiance\venv\Scripts\python.exe main.py

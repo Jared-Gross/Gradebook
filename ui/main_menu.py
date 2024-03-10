@@ -8,15 +8,28 @@ import ujson as json
 from PyQt6 import uic
 from PyQt6.QtCore import QFile, QSettings, Qt, QTextStream
 from PyQt6.QtGui import QAction, QIcon
-from PyQt6.QtWidgets import (QApplication, QDialog, QGroupBox, QHBoxLayout,
-                             QInputDialog, QListWidget, QMainWindow, QMenu,
-                             QMessageBox, QPushButton, QScrollArea, QTabWidget,
-                             QVBoxLayout, QWidget)
+from PyQt6.QtWidgets import (
+    QApplication,
+    QDialog,
+    QGroupBox,
+    QHBoxLayout,
+    QInputDialog,
+    QListWidget,
+    QMainWindow,
+    QMenu,
+    QMessageBox,
+    QPushButton,
+    QScrollArea,
+    QTabWidget,
+    QVBoxLayout,
+    QWidget,
+)
 
 from ui.about_dialog import AboutDialog
 from ui.add_student import AddStudent
 from ui.courses_list_widget import CoursesListWidget
 from ui.courses_tab_widget import CoursesTabWidget
+from ui.questions_editor_dialog import QuestionsEditor
 from ui.student import StudentWidget
 from ui.student_dialog import StudentDialog
 from utils import globals
@@ -85,6 +98,7 @@ class MainMenu(QMainWindow):
         self.actionDelete_Student: QAction
         self.actionAdd_New_School: QAction
         self.actionRemove_School: QAction
+        self.actionOpen_Questions_Editor: QAction
         self.actionAbout: QAction
         self.actionAbout_Qt: QAction
 
@@ -105,6 +119,7 @@ class MainMenu(QMainWindow):
         self.actionDelete_Student.triggered.connect(self.delete_student)
         self.actionAdd_New_School.triggered.connect(self.add_school)
         self.actionRemove_School.triggered.connect(self.delete_school)
+        self.actionOpen_Questions_Editor.triggered.connect(self.open_questions_editor)
         self.actionAbout.triggered.connect(self.show_about)
         self.actionAbout_Qt.triggered.connect(QApplication.aboutQt)
 
@@ -383,6 +398,9 @@ class MainMenu(QMainWindow):
             self.load_students()
         elif current_tab == "courses":
             self.load_courses()
+
+    def open_questions_editor(self):
+        questions_editor = QuestionsEditor(self.school, self)
 
     def show_about(self):
         about_dialog = AboutDialog(self)

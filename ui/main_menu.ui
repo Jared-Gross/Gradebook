@@ -48,7 +48,7 @@
                <x>0</x>
                <y>0</y>
                <width>1104</width>
-               <height>683</height>
+               <height>681</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_6" stretch="0">
@@ -145,7 +145,7 @@
              <x>0</x>
              <y>0</y>
              <width>1195</width>
-             <height>685</height>
+             <height>683</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -184,7 +184,7 @@
      <x>0</x>
      <y>0</y>
      <width>1414</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuCourses">
@@ -228,9 +228,16 @@
     <addaction name="actionAbout"/>
     <addaction name="actionAbout_Qt"/>
    </widget>
+   <widget class="QMenu" name="menuQuestions">
+    <property name="title">
+     <string>Questions</string>
+    </property>
+    <addaction name="actionOpen_Questions_Editor"/>
+   </widget>
    <addaction name="menuSchools"/>
    <addaction name="menuCourses"/>
    <addaction name="menuStudents"/>
+   <addaction name="menuQuestions"/>
    <addaction name="menuTheme"/>
    <addaction name="menuHelp"/>
   </widget>
@@ -282,6 +289,11 @@
   <action name="actionAbout_Qt">
    <property name="text">
     <string>About Qt</string>
+   </property>
+  </action>
+  <action name="actionOpen_Questions_Editor">
+   <property name="text">
+    <string>Open Questions Editor</string>
    </property>
   </action>
  </widget>
