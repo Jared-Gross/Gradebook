@@ -1,0 +1,63 @@
+table {
+    border: 1px solid #ccc;
+    table-layout: fixed;
+    /* width: 60%; */
+    /* height: 40%; */
+    /* margin-left: 20%; */
+    align-items: center;
+    text-align: center;
+    width: auto;
+}
+
+td,
+th {
+    width: 60px;
+    height: 35px;
+    overflow: hidden;
+}
+
+td:hover {
+    border-color: #94a0b4;
+}
+
+.cell-input {
+    background: #c8e4f8;
+    color: #000;
+    border: 1px solid #94a0b4;
+    width: 60px;
+    height: 35px;
+    overflow: hidden;
+}
+
+.chart input:not([type]),
+input[type=text]:not(.browser-default),
+input[type=password]:not(.browser-default),
+input[type=email]:not(.browser-default),
+input[type=url]:not(.browser-default),
+input[type=time]:not(.browser-default),
+input[type=date]:not(.browser-default),
+input[type=datetime]:not(.browser-default),
+input[type=datetime-local]:not(.browser-default),
+input[type=tel]:not(.browser-default),
+input[type=number]:not(.browser-default),
+input[type=search]:not(.browser-default),
+textarea.materialize-textarea {
+    height: 40px;
+    margin: 0;
+}
+
+#starting_number {
+    background: #d1d1d1;
+    color: #000;
+    border: 1px solid #a8a8a8;
+}
+
+#ending_number {
+    background: #c8f8e8;
+    color: #000;
+    border: 1px solid #94b4b1;
+}
+
+input[name=starting_number] {
+    pointer-events: none;
+}

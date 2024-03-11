@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <head>
+        <!-- basic -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!-- mobile metas -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+        <meta name="keywords" content="">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <script src="/static/jquery.js"></script>
+        <script src="/static/bootstrap.js"></script>
+        <script src="/static/bootstrap-select.js"></script>
+        <script type="module" src="/static/zero-md.min.js"></script>
+        <link type="text/css" href="/static/css/bootstrap.css" rel="stylesheet" />
+        <link type="text/css" href="/static/css/bootstrap-select.css" rel="stylesheet" />
+        <link rel="stylesheet" href="/static/css/materialize.min.css">
+        <link href="/static/css/icon.css" rel="stylesheet">
+        <link type="text/css" rel="stylesheet" href='/static/css/main.css' />
+        <link type="text/css" rel="stylesheet" href='/static/css/hundreds-chart.css' />
+        <title>Gradiance</title>
+    </head>
+</head>
+
+<body>
+    <ul id="home-slide-out" class="side-nav">
+        <li>
+            <div class="user-view">
+                <div class="row">
+                    <div class="row" style="margin-bottom: 0;">
+                        <div class="col s9 push-s3">
+                            <h4 style="font-size: 22px; text-align: left; margin: 0; margin-top: 10px;">{{ username }}
+                            </h4>
+                        </div>
+                        <div class="col s1 pull-s10">
+                            <img class="circle" style="background-color: black;" src="/static/favicon.png" alt="logo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="divider"></div>
+        </li>
+        <li><a class="subheader">Developed by the TheCodingJ's</a></li>
+        <form action="/logout" id="logout" method="post">
+            <li><a onclick="$('#logout').submit();" style="cursor: pointer;"><i
+                        class="material-icons">logout</i>Logout</a></li>
+        </form>
+        <footer class="page-footer">
+            <div class="container" style="padding: 0;">
+                <p class="grey-text text-lighten-4" style="line-height: 15px;">For questions, comments, or
+                    concerns about this serivce please email:<a
+                        href="mailto:jared@pinelandfarms.ca">jared@pinelandfarms.ca</a></p>
+            </div>
+            <div class="footer-copyright">
+                <div class="container" style="padding: 0;">
+                    © 2024 TheCodingJ'software
+                </div>
+            </div>
+        </footer>
+    </ul>
+    <nav>
+        <div class="nav-wrapper">
+            <a class="brand-logo center" style="font-size: 20px;">{{game_name}}</a>
+            <ul id="nav-mobile" class="left">
+                <li><a data-activates="home-slide-out" class="waves-effect waves-light btn-flat home-button-collapse"
+                        style="padding: 0;"><i class="material-icons" style="font-size: 36px;">menu</i></a></li>
+            </ul>
+        </div>
+    </nav>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div class="content">
+        <div class="charts">
+            {{ charts }}
+        </div>
+        <ul class="pagination" style="position: fixed; bottom: 50px; width: 100%; left: 0;">
+            <li class="waves-effect" id="pagination-prev"><a href="#!" page-number="prev"><i class="material-icons">chevron_left</i></a></li>
+            <li class="waves-effect" id="page-button1"><a href="#!" page-number="1">1</a></li>
+            <li class="waves-effect" id="page-button2"><a href="#!" page-number="2">2</a></li>
+            <li class="waves-effect" id="page-button3"><a href="#!" page-number="3">3</a></li>
+            <li class="waves-effect" id="page-button4"><a href="#!" page-number="4">4</a></li>
+            <li class="waves-effect" id="page-button5"><a href="#!" page-number="5">5</a></li>
+            <li class="waves-effect" id="page-button6"><a href="#!" page-number="6">6</a></li>
+            <li class="waves-effect" id="page-button7"><a href="#!" page-number="7">7</a></li>
+            <li class="waves-effect" id="page-button8"><a href="#!" page-number="8">8</a></li>
+            <li class="waves-effect" id="page-button9"><a href="#!" page-number="9">9</a></li>
+            <li class="waves-effect" id="page-button10"><a href="#!" page-number="10">10</a></li>
+            <li class="waves-effect" id="pagination-next"><a href="#!" page-number="next"><i class="material-icons">chevron_right</i></a></li>
+        </ul>
+        <button class="waves-effect waves-light btn" id="submitScore" type="submit">Submit</button>
+    </div>
+    <form action="/dashboard" method="get">
+        <button class="btn-floating btn-large waves-effect waves-light aqua" id="home" type="submit"><i
+                class="material-icons">home</i></button>
+    </form>
+</body>
+<script src="/static/materialize.min.js"></script>
+<script src="/static/script.js"></script>
+<script>
+    var currentPage = 1;
+    let checks_used = 0;
+    document.addEventListener("DOMContentLoaded", function () {
+        var paginationLinks = document.querySelectorAll('.pagination a');
+
+        function updatePaginationPrevNextStates() {
+            if (currentPage === "1") {
+                $('#pagination-prev').addClass('disabled');
+            } else {
+                $('#pagination-prev').removeClass('disabled');
+            }
+            if (currentPage === "10") {
+                $('#pagination-next').addClass('disabled');
+            } else {
+                $('#pagination-next').removeClass('disabled');
+            }
+        }
+
+        paginationLinks.forEach(function (link) {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                var chartAction = this.getAttribute('page-number');
+                updatePaginationPrevNextStates();
+
+                if (chartAction === "next") {
+                    currentPage += 1;
+                    if (currentPage == 11){
+                        currentPage = 1;
+                    }
+                    virtualClickOnPagination(currentPage);
+                } else if (chartAction === "prev") {
+                    currentPage -= 1;
+                    if (currentPage == 0){
+                        currentPage = 10;
+                    }
+                    virtualClickOnPagination(currentPage);
+                } else {
+                    currentPage = parseInt(chartAction);
+                    document.querySelectorAll('.page').forEach(function (tree) {
+                        tree.style.display = 'none';
+                    });
+                    for (let i = 1; i <= 10; i++) {
+                        $(`#page-button${i}`).removeClass("active")
+                    }
+                    document.getElementById('page' + currentPage).style.display = 'block';
+                    this.parentNode.classList.add('active');
+                }
+
+            });
+        });
+
+        function virtualClickOnPagination(chartNumber) {
+            var link = document.querySelector('.pagination a[page-number="' + chartNumber + '"]');
+            if (link) {
+                link.click();
+            }
+            $(`#page-button${currentPage}`).addClass("active")
+        }
+
+        virtualClickOnPagination(currentPage); // Initialize the view
+    });
+
+    function correctInput(chartId) {
+        const chart = document.querySelector(`#${chartId}`);
+        const ending_number = chart.querySelector('input[name="ending_number"].chart_number');
+        const isCorrect = parseInt(ending_number.value) === parseInt(ending_number.getAttribute("answer"));
+        return isCorrect;
+    }
+    async function submitScore() {
+        let score = 0;
+        let worth = 10;
+        for (let i = 1; i <= 10; i++) {
+            if (correctInput(`chart${i}`)) {
+                score++;
+            }
+        }
+        const formData = new FormData();
+        formData.append('score', score);
+        formData.append('worth', worth);
+        formData.append('checks_used', checks_used);
+        formData.append('game_played', "hundreds_chart");
+
+        try {
+            const response = await fetch('/submit-score', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                response.json().then(data => {
+                    if (data.success) {
+                        window.location.href = data.redirect; // Redirect based on the server's response
+                    }
+                });
+            } else {
+                Materialize.toast('Error submitting score', 1000);
+            }
+        } catch (error) {
+            console.error('Fetch error:', error);
+            Materialize.toast('Error submitting score', 1000);
+        }
+    }
+    document.getElementById('submitScore').addEventListener('click', function () {
+        submitScore();
+    });
+    function checkChart(chartId) {
+        checks_used += 1;
+        const successMessages = [
+            "Looking Good! Keep it up.",
+            "Great job! You're doing fantastic.",
+            "You nailed it! Excellent work.",
+            "Right on target! Well done.",
+            "Brilliant! You got it right.",
+            "Outstanding effort! You're making great progress.",
+            "Superb! You've mastered this concept.",
+            "Incredible work! You're on a roll.",
+            "Fantastic! Your hard work is paying off.",
+            "Spot on! You've grasped this perfectly.",
+            "Impressive! You're showing excellent understanding."
+        ];
+        const errorMessages = [
+            "Whoops! There is a mistake. Keep trying, don't give up!",
+            "Almost there! Just a bit more effort.",
+            "No worries! Mistakes help us learn.",
+            "Keep going! You'll get it with a bit more practice.",
+            "Not quite right, but don't lose heart!",
+            "It's okay to stumble. Pick yourself up and try again!",
+            "Close call! Review your steps and try again.",
+            "You're learning! Every mistake is a lesson.",
+            "Persistence is key! You're closer than you think.",
+            "A small hiccup! Refocus and give it another go.",
+            "Take your time! Patience leads to progress."
+        ];
+
+        const isCorrect = correctInput(`chart${chartId}`);
+
+        const messageArray = isCorrect ? successMessages : errorMessages;
+        const randomMessage = messageArray[Math.floor(Math.random() * messageArray.length)];
+
+        // Display the message
+        Materialize.toast(randomMessage, 3000); // Shorter display for success, longer for errors
+
+    }
+
+    function checkInputs() {
+        let allFilled = true;
+        var inputs = $('input[name="ending_number"].chart_number');
+        inputs.each(function () {
+            if ($(this).val() == '') {
+                allFilled = false;
+            }
+        });
+        if (allFilled) {
+            $('#submitScore').show();
+        } else {
+            $('#submitScore').hide();
+        }
+    }
+    $(document).ready(function () {
+        checkInputs();
+    });
+</script>
+
+</html>
