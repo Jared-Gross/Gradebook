@@ -7,7 +7,9 @@
 }
 
 #check{
-    margin-top: 50px;
+    position: relative;
+    bottom: 0;
+    left: 25%;
 }
 #playAgain{
     bottom: 130px;
@@ -47,6 +49,11 @@ button.song {
 summary {
     list-style: none;
     padding: 10px;
+}
+
+.page{
+    text-align: center;
+    align-items: center;
 }
 
 details {

@@ -12,7 +12,7 @@ messages = {
         "Keep your spirits up! The breakthrough you seek is just around the corner.",
         "Every expert was once a beginner. Ready for another round?",
         "The path to success is paved with attempts. Keep going!",
-        "This score doesn't define your potential. Onward and upward!"
+        "This score doesn't define your potential. Onward and upward!",
     ],
     1: [
         "You're on the board! Let's build on that first point.",
@@ -24,7 +24,7 @@ messages = {
         "You've made the first dent. Now, let's aim higher!",
         "A point earned is a learning confirmed. Keep adding to your score!",
         "With one point scored, you're on your way. Let's increase that count!",
-        "Every journey starts with a single step. Ready for the next one?"
+        "Every journey starts with a single step. Ready for the next one?",
     ],
     2: [
         "You're laying the foundation. Let's strengthen it with another try.",
@@ -36,7 +36,7 @@ messages = {
         "Two steps forward! Now, let's aim for the next leap.",
         "You're getting the hang of it. Keep the learning going!",
         "A couple of victories already. Imagine what's next!",
-        "You've started your climb. Keep the momentum up!"
+        "You've started your climb. Keep the momentum up!",
     ],
     3: [
         "Three cheers for your effort! Now, let's aim for even more.",
@@ -48,7 +48,7 @@ messages = {
         "Three marks of progress. You're on the right trajectory!",
         "A commendable effort. Let's review and improve further.",
         "Growth is evident. Let's nurture it into excellence.",
-        "You're uncovering the puzzle. Keep connecting the pieces."
+        "You're uncovering the puzzle. Keep connecting the pieces.",
     ],
     4: [
         "Fourfold success! Now, let's strive for more.",
@@ -60,7 +60,7 @@ messages = {
         "With every question, you grow stronger. Keep the streak going!",
         "Four steps forward. The peak is in sight. Onward!",
         "You're showing real progress. Let's fine-tune your skills.",
-        "Building block by block. You're constructing your success."
+        "Building block by block. You're constructing your success.",
     ],
     5: [
         "Halfway to perfection! Let's bridge the gap to the top.",
@@ -72,7 +72,7 @@ messages = {
         "A commendable halfway mark. Let's aim for full marks next time.",
         "You've got a good grip. Tighten it for the perfect score.",
         "Half of the battle is won. Now, for the victory lap.",
-        "You're on the right track. Keep the momentum to cover the other half."
+        "You're on the right track. Keep the momentum to cover the other half.",
     ],
     6: [
         "More than halfway there! Your efforts are showing.",
@@ -84,7 +84,7 @@ messages = {
         "You're on a positive trajectory. Keep aiming for the stars.",
         "Great progress! A few tweaks and you're there.",
         "The finish line is getting closer. Sprint towards it!",
-        "You've gathered a lot of knowledge. Time to make it complete."
+        "You've gathered a lot of knowledge. Time to make it complete.",
     ],
     7: [
         "Great work! You're doing really well, but there's room for improvement.",
@@ -96,7 +96,7 @@ messages = {
         "You've done well to get this far! Push a little further to excel.",
         "Good grasp on the material! A bit more refinement and you're there.",
         "You're doing great! Just a few tweaks and you could be at the top.",
-        "Impressive work! Fine-tune your understanding to reach the peak."
+        "Impressive work! Fine-tune your understanding to reach the peak.",
     ],
     8: [
         "Very good! You're close to mastery, just a few more steps.",
@@ -108,7 +108,7 @@ messages = {
         "You've shown great understanding! A little more effort for a full score.",
         "Almost flawless! Identify and work on the small gaps remaining.",
         "Superb! With a slight push, you can achieve the highest score.",
-        "You're doing wonderfully! A final review could lead to perfect results."
+        "You're doing wonderfully! A final review could lead to perfect results.",
     ],
     9: [
         "So close to perfection! Can you make it flawless?",
@@ -120,7 +120,7 @@ messages = {
         "You're at the doorstep of mastery. Cross the threshold!",
         "A 9 is fantastic, but a 10? Now that's excellence.",
         "You've shown great skill. Now, aim for perfection.",
-        "Brilliant performance! The final push can take you to perfection."
+        "Brilliant performance! The final push can take you to perfection.",
     ],
     10: [
         "Perfection! You've mastered this topic brilliantly.",
@@ -132,8 +132,8 @@ messages = {
         "Masterful performance! You've demonstrated complete understanding.",
         "Outstanding! A perfect score is a testament to your effort.",
         "Bravo! Perfection is not easy, but you've made it look so.",
-        "Superb! You've reached the pinnacle of achievement in this challenge."
-    ]
+        "Superb! You've reached the pinnacle of achievement in this challenge.",
+    ],
 }
 
 
