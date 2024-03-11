@@ -11,6 +11,7 @@ import tornado.web
 import tornado.websocket
 from ansi2html import Ansi2HTMLConverter
 from games.prime_factorization import PrimeFactorizationHandler
+from games.hundreds_chart import HundredsChartHandler
 from markupsafe import Markup
 
 from utils import globals
@@ -24,9 +25,6 @@ globals.initialize()
 
 loader = jinja2.FileSystemLoader("templates")
 env = jinja2.Environment(loader=loader)
-
-school = School("Pineland")
-school.load()
 
 
 connected_clients = set()
@@ -76,7 +74,7 @@ class LoginHandler(tornado.web.RequestHandler):
         connected_clients.add(self)
 
     def post(self):
-        school.load()
+        globals.school.load()
         current_ip = self.request.remote_ip
         if current_ip in sessions and sessions[current_ip]["logged_in"]:
             CustomPrint.print(
@@ -85,7 +83,7 @@ class LoginHandler(tornado.web.RequestHandler):
             self.redirect("/dashboard")
             return
         username = self.get_argument("username")
-        for student in school.students:
+        for student in globals.school.students:
             if (
                 username.lower() == student.first_name.lower()
                 or username.lower() == student.name.lower()
@@ -140,7 +138,7 @@ class DashboardHandler(tornado.web.RequestHandler):
         template = env.get_template("dashboard.html")
         rendered_template = template.render(
             username=sessions[current_ip]["username"],
-            games={"Prime Factorization": "prime_factorization"},
+            games={"Prime Factorization": "prime_factorization", "Hundreds Chart": "hundreds_chart"},
         )
         self.write(rendered_template)
 
@@ -219,6 +217,7 @@ def make_app():
             (r"/submit-score", SubmitScoreHandler),
             (r"/view_score", ViewScoreHandler),
             (r"/prime_factorization", PrimeFactorizationHandler),
+            (r"/hundreds_chart", HundredsChartHandler),
         ],
         **settings,
     )
