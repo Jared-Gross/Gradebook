@@ -17,7 +17,6 @@ from markupsafe import Markup
 from utils import globals
 from utils.colors import Colors
 from utils.custom_print import CustomPrint
-from utils.school import School
 from utils.score_messages import random_message
 from utils.sessions import sessions
 
