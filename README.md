@@ -36,11 +36,11 @@
 
 <h1>Gradebook</h1>
 
-<p>A gradebook for teachers.</p>
+<p>A gradebook for teachers. Formerly known as Gradiance.</p>
 
-<h2>About Gradiance</h2>
+<h2>About Gradebook</h2>
 
-<p>An open-source gradebook software designed to simplify the process of managing grades and generating reports for educators. Started as a personal project, it aims to provide a user-friendly interface for teachers to efficiently track student progress and performance.
+An open-source software designed to simplify the process of managing grades and generating reports for educators. Started as a personal project, it aims to provide a user-friendly interface for teachers to efficiently track student progress and performance.
 
 <h2>Demo</h2>
 <p align="center">
