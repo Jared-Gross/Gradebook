@@ -74,7 +74,7 @@ class Student:
         elif 17 <= age <= 18:
             return "Grade 12"
         else:
-            return "Unknown"
+            return "None"
 
     def get_school_stage(self, age=None) -> str:
         if age is None:
@@ -86,7 +86,7 @@ class Student:
         elif 12 <= age <= 18:
             return "High School"
         else:
-            return "Unknown"
+            return "None"
 
     def get_next_grade_levels(self) -> list[tuple[str, int, int]]:
         next_grade_levels = []

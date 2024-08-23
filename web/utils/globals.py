@@ -8,9 +8,13 @@ __version__ = "v0.0.2"
 
 
 def initialize():
-    global database_location, grade_ranges, games_config, school
+    global database_location, grade_ranges, games_config, school, questions_data, default_school
+    
     with open("DATABASE_LOCATION.txt") as file:
         database_location = os.path.normpath(file.read().strip())
+
+    with open("DEFAULT_SCHOOL.txt") as file:
+        default_school = os.path.normpath(file.read().strip())
 
     grade_ranges = []
     with open("grade_ranges.json", "r") as file:
@@ -21,5 +25,8 @@ def initialize():
     with open('games/games_config.json') as file:
         games_config = json.load(file)
 
-    school = School("Pineland")
+    with open(f"{database_location}/{default_school}/Questions.json") as file:
+        questions_data = json.load(file)
+
+    school = School(default_school)
     school.load()

@@ -82,6 +82,10 @@ class MainMenu(QMainWindow):
         self.load_students()
         self.load_courses()
         self.load_themes_menu()
+        for action in self.menuLoad_School.actions():
+            if action.text() == self.school.name:
+                action.setChecked(True)
+                break
 
     def load_ui_types(self):
         self.menuTheme: QMenu
@@ -101,6 +105,7 @@ class MainMenu(QMainWindow):
         self.actionOpen_Questions_Editor: QAction
         self.actionAbout: QAction
         self.actionAbout_Qt: QAction
+        self.menuLoad_School: QMenu
 
     def load_clicked_events(self):
         self.tabWidget.tabBarClicked.connect(self.main_tab_clicked)
@@ -372,7 +377,7 @@ class MainMenu(QMainWindow):
             self.load_schools()
             os.remove(f"{globals.database_location}/{item}")
 
-    def load_school(self, school_name: str):
+    def load_school(self, school_name: str, pressed_action: QAction):
         self.settings.setValue("last_opened_school", school_name)
         self.school.save()
         self.school = School(school_name)
@@ -383,13 +388,18 @@ class MainMenu(QMainWindow):
         self.load_themes_menu()
         self.load_students()
         self.load_courses()
+        for action in self.menuLoad_School.actions():
+            action.setChecked(False)
+        pressed_action.setChecked(True)
 
     def load_schools(self):
         self.menuLoad_School.clear()
         for school in os.listdir("database"):
             action = QAction(school, self.menuLoad_School)
-            action.triggered.connect(partial(self.load_school, school))
+            action.triggered.connect(partial(self.load_school, school, action))
             self.menuLoad_School.addAction(action)
+            action.setCheckable(True)
+            action.setChecked(False)
 
     def main_tab_clicked(self, index: int):
         self.settings.setValue("last_opened_tab", index)

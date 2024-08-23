@@ -49,7 +49,8 @@ class QuestionsTreeWidget(QTreeWidget):
                 partial(self.add_option, parent, "New Option", False, button_child)
             )
             self.setItemWidget(button_child, 0, add_option_button)
-        parent.setExpanded(True)
+        parent.setExpanded(False)
+        self.select
         self.invisibleRootItem().insertChild(1, parent)
         return parent
 

@@ -12,6 +12,7 @@ import tornado.websocket
 from ansi2html import Ansi2HTMLConverter
 from games.prime_factorization import PrimeFactorizationHandler
 from games.hundreds_chart import HundredsChartHandler
+from games.multiple_choice import QuestionsHandler
 from markupsafe import Markup
 
 from utils import globals
@@ -137,9 +138,18 @@ class DashboardHandler(tornado.web.RequestHandler):
         template = env.get_template("dashboard.html")
         rendered_template = template.render(
             username=sessions[current_ip]["username"],
-            games={"Prime Factorization": "prime_factorization", "Hundreds Chart": "hundreds_chart"},
+            games=self.load_games(),
         )
         self.write(rendered_template)
+
+    def load_games(self) -> dict[str, str]:
+        grade_level = globals.school.get_student_from_name(sessions[self.request.remote_ip]['username']).get_grade_level()
+        games = {"Prime Factorization": "prime_factorization", "Hundreds Chart": "hundreds_chart"}
+        grade_level_games = globals.questions_data[grade_level]
+        for game in list(grade_level_games.keys()):
+            game_url = f'questions/{game.lower().replace(" ", "_")}'
+            games.setdefault(game, game_url)
+        return games    
 
     def post(self):
         pass
@@ -217,6 +227,7 @@ def make_app():
             (r"/view_score", ViewScoreHandler),
             (r"/prime_factorization", PrimeFactorizationHandler),
             (r"/hundreds_chart", HundredsChartHandler),
+            (r"/questions/(.*)", QuestionsHandler),
         ],
         **settings,
     )
@@ -252,7 +263,7 @@ async def main():
 """
     )
     app = make_app()
-    app.listen(8888, address="10.11.2.159")
+    app.listen(8888)
     CustomPrint.print("INFO - Server started")
     shutdown_event = asyncio.Event()
     await shutdown_event.wait()
