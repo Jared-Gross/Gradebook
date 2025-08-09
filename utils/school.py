@@ -8,13 +8,15 @@ from utils.assignment import Assignment
 from utils.assignment_template import AssignmentTemplate
 from utils.course import Course
 from utils.student import Student
+from web.utils import school
 
 
 class School:
     def __init__(self, name: str) -> None:
         self.name: str = name
-        if not os.path.exists(f"{globals.database_location}/{self.name}"):
-            os.makedirs(f"{globals.database_location}/{self.name}")
+        school_location = os.path.join(globals.database_location, self.name)
+        if not os.path.exists(school_location):
+            os.makedirs(school_location)
         self.students: list[Student] = []
         self.courses: list[Course] = []
         self.data: dict[str, Union[list[Course], list[Student]]] = {
@@ -43,9 +45,8 @@ class School:
         return data
 
     def save(self):
-        with open(
-            f"{globals.database_location}/{self.name}/{self.name}.json", "w"
-        ) as file:
+        save_location = os.path.join(globals.database_location, self.name, "school.json")
+        with open(save_location, "w") as file:
             json.dump(self.to_dict(), file, indent=4)
 
     def get_student(self, id: str) -> Student:
@@ -53,11 +54,7 @@ class School:
 
     def get_student_from_name(self, name: str) -> Student:
         return next(
-            (
-                student
-                for student in self.students
-                if f"{student.first_name} {student.last_name}" == name
-            ),
+            (student for student in self.students if f"{student.first_name} {student.last_name}" == name),
             None,
         )
 
@@ -65,18 +62,15 @@ class School:
         return next((course for course in self.courses if course.name == name), None)
 
     def get_enrolled_courses(self, student: Student) -> list[Course]:
-        return [
-            course for course in self.courses if course.is_student_enrolled(student)
-        ]
+        return [course for course in self.courses if course.is_student_enrolled(student)]
 
     def load(self) -> dict:
         data = {}
         self.students.clear()
         self.courses.clear()
         try:
-            with open(
-                f"{globals.database_location}/{self.name}/{self.name}.json", "r"
-            ) as file:
+            save_location = os.path.join(globals.database_location, self.name, "school.json")
+            with open(save_location, "r") as file:
                 data = json.load(file)
         except FileNotFoundError:
             self.save()
@@ -95,13 +89,9 @@ class School:
             for assessment, assessment_data in course_data["assessments"].items():
                 for student_id in assessment_data:
                     for assignment_data in assessment_data[student_id]:
-                        template = AssignmentTemplate(
-                            assignment_data["name"], assignment_data["worth"]
-                        )
+                        template = AssignmentTemplate(assignment_data["name"], assignment_data["worth"])
                         if course.does_template_exist(assessment, template):
-                            template = course.get_template(
-                                assessment, assignment_data["name"]
-                            )
+                            template = course.get_template(assessment, assignment_data["name"])
                         else:
                             course.add_template(assessment, template)
                         assignment = Assignment(template)

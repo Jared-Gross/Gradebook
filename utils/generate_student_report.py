@@ -1,4 +1,4 @@
-import pathlib
+import os
 
 from utils import globals
 from utils.assignment import Assignment
@@ -14,9 +14,7 @@ class StudentReport:
         self.school = school
         self.student = student
         self.courses = self.school.get_enrolled_courses(self.student)
-        self.student_report_html_template = pathlib.Path(
-            globals.student_report_html_template
-        ).read_text()
+        self.student_report_html_template = os.path.join(globals.database_location, globals.student_report_html_template)
         self.generated_html_file = self.student_report_html_template
         self.file_name: str = f"{self.student.name}.html"
 
@@ -26,9 +24,7 @@ class StudentReport:
         grand_total_weighted_score = 0.0
         grand_total_weighted_worth = 0.0
         self.load_imports()
-        self.generated_html_file = self.generated_html_file.replace(
-            "[[ STUDENT_NAME ]]", self.student.name
-        )
+        self.generated_html_file = self.generated_html_file.replace("[[ STUDENT_NAME ]]", self.student.name)
 
         student_html = ""
         student_html += f"<h1>{self.student.first_name} {self.student.middle_name} {self.student.last_name}</h1>"
@@ -93,16 +89,14 @@ class StudentReport:
                         table_rows += row_data
                         table_rows += "</tr>"
                 if assessment_total_worth != 0:
-                    course_total_weighted_score += (
-                        course.grading[assessment]
-                        * assessment_total_score
-                        / assessment_total_worth
-                    )
+                    course_total_weighted_score += course.grading[assessment] * assessment_total_score / assessment_total_worth
                     course_total_weighted_worth += course.grading[assessment]
-                    table_rows += f"<tr><td><b>Total</b></td><td><b>{round(course.grading[assessment] * assessment_total_score / assessment_total_worth, 2)}/{round(course.grading[assessment], 2)}</b></td><td><b>{round(assessment_total_score / assessment_total_worth * 100,2)}%</b></td><td><b>{get_letter_grade(assessment_total_score/assessment_total_worth*100)}</b></td></tr>"
+                    table_rows += f"<tr><td><b>Total</b></td><td><b>{round(course.grading[assessment] * assessment_total_score / assessment_total_worth, 2)}/{round(course.grading[assessment], 2)}</b></td><td><b>{round(assessment_total_score / assessment_total_worth * 100, 2)}%</b></td><td><b>{get_letter_grade(assessment_total_score / assessment_total_worth * 100)}</b></td></tr>"
                 else:
                     course_total_weighted_worth += course.grading[assessment]
-                    table_rows += f"<tr><td><b>Total</b></td><td><b>0.0/{round(course.grading[assessment], 2)}</b></td><td><b>0.0%</b></td><td><b>{get_letter_grade(0.0)}</b></td></tr>"
+                    table_rows += (
+                        f"<tr><td><b>Total</b></td><td><b>0.0/{round(course.grading[assessment], 2)}</b></td><td><b>0.0%</b></td><td><b>{get_letter_grade(0.0)}</b></td></tr>"
+                    )
 
                 table_html += table_rows
                 table_html += "</tbody>"
@@ -114,7 +108,7 @@ class StudentReport:
             grand_total_weighted_score += course_total_weighted_score
             grand_total_weighted_worth += course_total_weighted_worth
             try:
-                summary_html += f'<tr><td><a href="#{course.name}">{course.name}</a></td><td>{round(course_total_score, 2)}/{round(course_total_worth, 2)}</td><td>{round(course_total_weighted_score, 2)}/{course_total_weighted_worth}</td><td>{round(course_total_weighted_score, 2)}%</td><td>{get_letter_grade(course_total_weighted_score/course_total_weighted_worth*100)}</td></tr>'
+                summary_html += f'<tr><td><a href="#{course.name}">{course.name}</a></td><td>{round(course_total_score, 2)}/{round(course_total_worth, 2)}</td><td>{round(course_total_weighted_score, 2)}/{course_total_weighted_worth}</td><td>{round(course_total_weighted_score, 2)}%</td><td>{get_letter_grade(course_total_weighted_score / course_total_weighted_worth * 100)}</td></tr>'
             except ZeroDivisionError:
                 summary_html += f'<tr><td><a href="#{course.name}">{course.name}</a></td><td>{round(course_total_score, 2)}/{round(course_total_worth, 2)}</td><td>{round(course_total_weighted_score, 2)}/{course_total_weighted_worth}</td><td>{round(course_total_weighted_score, 2)}%</td><td>{get_letter_grade(0.0)}</td></tr>'
             course_html += '<div class="page-break"></div>'
@@ -124,58 +118,32 @@ class StudentReport:
             page_html += course_html
             grand_total_score += course_total_score
             grand_total_worth += course_total_worth
-
-        summary_html += f"<tr><td><b>Grand total</b></td><td><b>{round(grand_total_score, 2)}/{grand_total_worth}</b></td><td><b>{round(grand_total_weighted_score, 2)}/{grand_total_weighted_worth}</b></td><td><b>{round(grand_total_weighted_score/grand_total_weighted_worth*100,2)}%</b></td><td><b>{get_letter_grade(grand_total_weighted_score/grand_total_weighted_worth*100)}</b></td></tr>"
+        try:
+            summary_html += f"<tr><td><b>Grand total</b></td><td><b>{round(grand_total_score, 2)}/{grand_total_worth}</b></td><td><b>{round(grand_total_weighted_score, 2)}/{grand_total_weighted_worth}</b></td><td><b>{round(grand_total_weighted_score / grand_total_weighted_worth * 100, 2)}%</b></td><td><b>{get_letter_grade(grand_total_weighted_score / grand_total_weighted_worth * 100)}</b></td></tr>"
+        except ZeroDivisionError:
+            summary_html += f"<tr><td><b>Grand total</b></td><td><b>0.0/{round(grand_total_worth, 2)}</b></td><td><b>0.0/{grand_total_weighted_worth}</b></td><td><b>0.0%</b></td><td><b>{get_letter_grade(0.0)}</b></td></tr>"
         summary_html += "</table>"
         summary_html += "</div>"
 
         student_html += summary_html
 
-        self.generated_html_file = self.generated_html_file.replace(
-            "[[ TABLES ]]", page_html
-        )
-        self.generated_html_file = self.generated_html_file.replace(
-            "[[ STUDENT ]]", student_html
-        )
-        with open(
-            f"{globals.database_location}/{self.school.name}/{self.file_name}", "w"
-        ) as f:
+        self.generated_html_file = self.generated_html_file.replace("[[ TABLES ]]", page_html)
+        self.generated_html_file = self.generated_html_file.replace("[[ STUDENT ]]", student_html)
+        with open(f"{globals.database_location}/{self.school.name}/{self.file_name}", "w") as f:
             f.write(self.generated_html_file)
 
         open_folder(f"{globals.database_location}/{self.school.name}/{self.file_name}")
         return self.generated_html_file
 
     def load_imports(self):
-        self.generated_html_file = self.generated_html_file.replace(
-            "[[ BOOTSTRAP_SELECT_JS ]]", globals.bootstrap_select_js
-        )
-        self.generated_html_file = self.generated_html_file.replace(
-            "[[ BOOTSTRAP_JS ]]", globals.bootstrap_js
-        )
-        self.generated_html_file = self.generated_html_file.replace(
-            "[[ JQUERY_JS ]]", globals.jquery_js
-        )
-        self.generated_html_file = self.generated_html_file.replace(
-            "[[ MATERIALIZE_JS ]]", globals.materialize_js
-        )
-        self.generated_html_file = self.generated_html_file.replace(
-            "[[ MAIN_JS ]]", globals.main_js
-        )
-        self.generated_html_file = self.generated_html_file.replace(
-            "[[ BOOTSTRAP_SELECT_CSS ]]", globals.bootstrap_select_css
-        )
-        self.generated_html_file = self.generated_html_file.replace(
-            "[[ BOOTSTRAP_CSS ]]", globals.bootstrap_css
-        )
-        self.generated_html_file = self.generated_html_file.replace(
-            "[[ ICON_CSS ]]", globals.icon_css
-        )
-        self.generated_html_file = self.generated_html_file.replace(
-            "[[ MATERIALIZE_CSS ]]", globals.materialize_css
-        )
-        self.generated_html_file = self.generated_html_file.replace(
-            "[[ MAIN_CSS ]]", globals.main_css
-        )
-        self.generated_html_file = self.generated_html_file.replace(
-            "[[ INTER_CSS ]]", globals.inter_css
-        )
+        self.generated_html_file = self.generated_html_file.replace("[[ BOOTSTRAP_SELECT_JS ]]", globals.bootstrap_select_js)
+        self.generated_html_file = self.generated_html_file.replace("[[ BOOTSTRAP_JS ]]", globals.bootstrap_js)
+        self.generated_html_file = self.generated_html_file.replace("[[ JQUERY_JS ]]", globals.jquery_js)
+        self.generated_html_file = self.generated_html_file.replace("[[ MATERIALIZE_JS ]]", globals.materialize_js)
+        self.generated_html_file = self.generated_html_file.replace("[[ MAIN_JS ]]", globals.main_js)
+        self.generated_html_file = self.generated_html_file.replace("[[ BOOTSTRAP_SELECT_CSS ]]", globals.bootstrap_select_css)
+        self.generated_html_file = self.generated_html_file.replace("[[ BOOTSTRAP_CSS ]]", globals.bootstrap_css)
+        self.generated_html_file = self.generated_html_file.replace("[[ ICON_CSS ]]", globals.icon_css)
+        self.generated_html_file = self.generated_html_file.replace("[[ MATERIALIZE_CSS ]]", globals.materialize_css)
+        self.generated_html_file = self.generated_html_file.replace("[[ MAIN_CSS ]]", globals.main_css)
+        self.generated_html_file = self.generated_html_file.replace("[[ INTER_CSS ]]", globals.inter_css)
